@@ -25,6 +25,58 @@ don't know about or cannot detect.
 
 =over 4
 
+=item B<hyperv>
+
+This is Microsoft Hyper-V hypervisor.
+
+Status: confirmed by RWMJ
+
+=item B<ibm_systemz>
+
+This is an IBM SystemZ (or other S/390) hardware partitioning system.
+Additional facts listed below may also be printed.
+
+=item B<ibm_systemz-direct>
+
+This is Linux running directly on a IBM SystemZ hardware partitioning
+system.
+
+This is expected to be a highly unusual configuration - if
+you see this result you should treat it with suspicion.
+
+Status: not confirmed
+
+=item B<ibm_systemz-lpar>
+
+This is Linux running directly on an LPAR on an IBM SystemZ
+hardware partitioning system.
+
+Status: not confirmed
+
+=item B<ibm_systemz-zvm>
+
+This is a z/VM guest running in an LPAR on an IBM SystemZ
+hardware partitioning system.
+
+Status: confirmed by RWMJ using a Fedora guest running in z/VM
+
+=item B<linux_vserver>
+
+This process is running in a Linux VServer container.
+
+Status: contributed by Barış Metin
+
+=item B<kvm>
+
+This guest is running on the KVM hypervisor using hardware
+acceleration.
+
+Note that if the hypervisor is using software acceleration
+you should I<not> see this, but should see the C<qemu> fact
+instead.
+
+Status: confirmed by RWMJ.
+
 =item B<openvz>
 
 The guest appears to be running inside an OpenVZ or Virtuozzo
@@ -32,15 +84,26 @@ container.
 
 Status: contributed by Evgeniy Sokolov
 
-=item B<kvm>
+=item B<parallels>
 
-This is KVM.
+The guest is running inside Parallels Virtual Platform
+(Parallels Desktop, Parallels Server).
 
-Status: confirmed by RWMJ.
+Status: contributed by Justin Clift
+
+=item B<powervm_lx86>
+
+The guest is running inside IBM PowerVM Lx86 Linux/x86 emulator.
+
+Status: data originally supplied by Jeffrey Scheel, confimed by
+Yufang Zhang and RWMJ
 
 =item B<qemu>
 
-This is QEMU.
+This is QEMU hypervisor using software emulation.
+
+Note that for KVM (hardware accelerated) guests you should I<not> see
+this.
 
 Status: confirmed by RWMJ.
 
@@ -49,6 +112,22 @@ Status: confirmed by RWMJ.
 This is a User-Mode Linux (UML) guest.
 
 Status: contributed by Laurent Léonard
+
+=item B<virt>
+
+Some sort of virtualization appears to be present, but we are not sure
+what it is.  In some very rare corner cases where we know that
+virtualization is hard to detect, we will try a timing attack to see
+if certain machine instructions are running much more slowly than they
+should be, which would indicate virtualization.  In this case, the
+generic fact C<virt> is printed.
+
+=item B<virtage>
+
+This is Hitachi Virtualization Manager (HVM) Virtage
+hardware partitioning system.
+
+Status: data supplied by Bhavna Sarathy, not confirmed
 
 =item B<virtualbox>
 
@@ -64,13 +143,13 @@ Status: not confirmed
 
 =item B<vmware>
 
-The guest appears to be running on VMware.
+The guest appears to be running on VMware hypervisor.
 
 Status: confirmed by RWMJ
 
 =item B<xen>
 
-The guest appears to be running on Xen.
+The guest appears to be running on Xen hypervisor.
 
 Status: confirmed by RWMJ
 
@@ -93,6 +172,40 @@ This is a Xen guest fully virtualized (HVM).
 Status: confirmed by RWMJ
 
 =back
+
+=head1 EXIT STATUS
+
+Programs that use or wrap C<virt-what> should check that the exit
+status is 0 before they attempt to parse the output of the command.
+
+A non-zero exit status indicates some error, for example, an
+unrecognized command line argument.  If the exit status is non-zero
+then the output "facts" (if any were printed) cannot be guaranteed and
+should be ignored.
+
+The exit status does I<not> have anything to do with whether the
+program is running on baremetal or under virtualization, nor with
+whether C<virt-what> managed detection "correctly" (which is basically
+unknowable given the large variety of virtualization systems out there
+and that some systems deliberately emulate others).
+
+=head1 RUNNING VIRT-WHAT FROM OTHER PROGRAMS
+
+C<virt-what> is designed so that you can easily run it from
+other programs or wrap it up in a library.
+
+Your program should check the exit status (see the section above).
+
+Some programming languages (notably Python: issue 1652) erroneously
+mask the C<SIGPIPE> signal and do not restore it when executing
+subprocesses.  C<virt-what> is a shell script and some shell commands
+do not work correctly when you do this.  You may see warnings from
+C<virt-what> similar to this:
+
+ echo: write error: Broken pipe
+
+The solution is to set the C<SIGPIPE> signal handler back to C<SIG_DFL>
+before running C<virt-what>.
 
 =head1 IMPORTANT NOTE
 
@@ -120,8 +233,7 @@ You might include this information in status and monitoring programs.
 
 =head1 SEE ALSO
 
-L<http://www.libvirt.org/>,
-L<http://et.redhat.com/~rjones/>,
+L<http://people.redhat.com/~rjones/virt-what/>,
 L<http://www.vmware.com/>,
 L<http://www.microsoft.com/windows/products/winfamily/virtualpc>,
 L<http://xensource.com/>,
@@ -135,8 +247,8 @@ Richard W.M. Jones <rjones @ redhat . com>
 
 =head1 COPYRIGHT
 
-(C) Copyright 2008 Red Hat Inc.,
-L<http://libvirt.org/>
+(C) Copyright 2008-2011 Red Hat Inc.,
+L<http://people.redhat.com/~rjones/virt-what/>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -176,7 +288,7 @@ Run
 and keep I<virt-what.log>.  It may contain error messages which you
 should submit with your bug report.
 
-=item 3. Get version of virt-what and version of libvirt.
+=item 3. Get version of virt-what.
 
 Run
 
@@ -188,7 +300,7 @@ Go to L<https://bugzilla.redhat.com/> and enter a new bug.
 Please describe the problem in as much detail as possible.
 
 Remember to include the version numbers (step 3) and the debug
-messages file (step 2).
+messages file (step 2) and as much other detail as possible.
 
 =item 5. Assign the bug to rjones @ redhat.com
 

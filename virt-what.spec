@@ -1,6 +1,6 @@
 Name:           virt-what
-Version:        1.3
-Release:        4.4%{?dist}
+Version:        1.11
+Release:        1.1%{?dist}
 Summary:        Detect if we are running in a virtual machine
 
 Group:          Applications/Emulators
@@ -10,34 +10,15 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL:            http://people.redhat.com/~rjones/virt-what/
 Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz
 
-# Include the .gitignore file from 1.3 so that the patches below can
-# patch this file.
-Source1:        gitignore-1.3
-
-Patch0001:      0001-Add-detection-of-IBM-PowerVM-Lx86-Linux-x86-emulator.patch
-Patch0002:      0002-Detect-Microsoft-Hyper-V.patch
-Patch0003:      0003-Add-detection-of-Hitachi-Virtualization-Manager-HVM-.patch
-Patch0004:      0004-Set-LANG-C-when-running-external-dmidecode-command.patch
-Patch0005:      0005-Add-a-test-for-baremetal.patch
-Patch0006:      0006-Add-test-for-VMware-with-data-from-ESX-4.1-thanks-Ma.patch
-Patch0007:      0007-Add-tests-for-KVM-and-QEMU.patch
-Patch0008:      0008-Add-test-files-to-EXTRA_DIST.patch
-Patch0009:      0009-Fix-tests-Add-proc-self-status-to-test-roots.patch
-Patch0010:      0010-Add-regression-test-for-RHEL-5-Xen-Dom0.patch
-Patch0011:      0011-Add-regression-test-for-RHEL-5-Xen-DomU-paravirt.patch
-Patch0012:      0012-Add-regression-test-for-RHEL-5-Xen-DomU-HVM-aka-full.patch
-Patch0013:      0013-Add-missing-files-to-EXTRA_DIST.patch
-Patch0014:      0014-Add-support-for-Linux-kernels-with-pv_ops-running-on.patch
-Patch0015:      0015-Add-sys-hypervisor-files-from-RHEL-5-Xen-DomU-to-EXT.patch
-Patch0016:      0016-Add-sys-hypervisor-test-files-from-RHEL-5-Xen-Dom0.patch
-Patch0017:      0017-Add-test-for-z-VM-on-IBM-SystemZ-mainframes-thanks-D.patch
-Patch0018:      0018-Add-additional-facts-about-IBM-SystemZ-mainframes-th.patch
-Patch0019:      0019-Confirm-Microsoft-Hyper-V-and-add-a-regression-test.patch
-Patch0020:      0020-Various-improvements-to-the-manual-page-RHBZ-672285.patch
+# Patches over upstream 1.11.
+Patch0001:      0001-IA64-Xen-HVM-should-print-xen-hvm-not-xen-domU.patch
 
 # This is provided by the build root, but we make it explicit
 # anyway in case this was dropped from the build root in future.
 BuildRequires:  /usr/bin/pod2man
+
+# Required at build time in order to do 'make check' (for getopt).
+BuildRequires:  util-linux-ng
 
 # virt-what script uses dmidecode and getopt (from util-linux-ng).
 # RPM cannot detect this so make the dependencies explicit here.
@@ -62,50 +43,27 @@ the program is running inside a type of virtual machine which we don't
 know about or cannot detect.
 
 Current types of virtualization detected:
-KVM, Xen, unaccelerated QEMU, VMWare, VirtualBox, VirtualPC,
-OpenVZ, Virtuozzo, User-Mode Linux (UML).
+
+ - hyperv       Microsoft Hyper-V
+ - kvm          Linux Kernel Virtual Machine (KVM)
+ - openvz       OpenVZ or Virtuozzo
+ - powervm_lx86 IBM PowerVM Lx86 Linux/x86 emulator
+ - qemu         QEMU (unaccelerated)
+ - uml          User-Mode Linux (UML)
+ - virtage      Hitachi Virtualization Manager (HVM) Virtage LPAR
+ - virtualbox   VirtualBox
+ - virtualpc    Microsoft VirtualPC
+ - vmware       VMware
+ - xen          Xen
+ - xen-dom0     Xen dom0 (privileged domain)
+ - xen-domU     Xen domU (paravirtualized guest domain)
+ - xen-hvm      Xen guest fully virtualized (HVM)
 
 
 %prep
 %setup -q
 
-cp %{SOURCE1} .gitignore
-
 %patch0001 -p1
-%patch0002 -p1
-%patch0003 -p1
-%patch0004 -p1
-%patch0005 -p1
-%patch0006 -p1
-%patch0007 -p1
-%patch0008 -p1
-%patch0009 -p1
-%patch0010 -p1
-%patch0011 -p1
-%patch0012 -p1
-%patch0013 -p1
-%patch0014 -p1
-%patch0015 -p1
-%patch0016 -p1
-%patch0017 -p1
-%patch0018 -p1
-%patch0019 -p1
-%patch0020 -p1
-
-# Patch doesn't set +x permissions on new files so we have to
-# do it manually:
-chmod +x tests/test-*.sh tests/*/sbin/*
-
-# Grrr patch refuses to create empty files:
-mkdir tests/esx4.1/proc/self
-touch tests/esx4.1/proc/self/status
-mkdir tests/qemu/proc/self
-touch tests/qemu/proc/self/status
-touch tests/rhel5-xen-dom0/proc/xen/privcmd
-touch tests/rhel5-xen-dom0/proc/xen/xenbus
-touch tests/rhel5-xen-domU-pv/proc/xen/capabilities
-touch tests/rhel5-xen-domU-pv/proc/xen/privcmd
-touch tests/rhel5-xen-domU-pv/proc/xen/xenbus
 
 
 %build
@@ -135,6 +93,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jun 24 2011 Richard W.M. Jones <rjones@redhat.com> - 1.11-1.1
+- Rebase to virt-what 1.11.
+  resolves: rhbz#672211
+- Add patch "IA64 Xen HVM should print 'xen-hvm' not 'xen-domU'" from upstream.
+
 * Mon Jan 31 2011 Richard W.M. Jones <rjones@redhat.com> - 1.3-4.4
 - Various improvements to the wording in the manual page.
   resolves: rhbz#672285
