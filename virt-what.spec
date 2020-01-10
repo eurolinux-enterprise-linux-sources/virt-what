@@ -1,6 +1,6 @@
 Name:           virt-what
 Version:        1.11
-Release:        1.1%{?dist}
+Release:        1.2%{?dist}
 Summary:        Detect if we are running in a virtual machine
 
 Group:          Applications/Emulators
@@ -11,7 +11,8 @@ URL:            http://people.redhat.com/~rjones/virt-what/
 Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz
 
 # Patches over upstream 1.11.
-Patch0001:      0001-IA64-Xen-HVM-should-print-xen-hvm-not-xen-domU.patch
+Patch1:         0001-IA64-Xen-HVM-should-print-xen-hvm-not-xen-domU.patch
+Patch2:         0001-Change-dmidecode-detection-of-Hitachi-Virtage.patch
 
 # This is provided by the build root, but we make it explicit
 # anyway in case this was dropped from the build root in future.
@@ -63,7 +64,8 @@ Current types of virtualization detected:
 %prep
 %setup -q
 
-%patch0001 -p1
+%patch1 -p1
+%patch2 -p1
 
 
 %build
@@ -93,6 +95,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Oct 11 2012 Richard W.M. Jones <rjones@redhat.com> - 1.11-1.2
+- Add patch to fix dmidecode detection of Hitachi Virtage
+  (thanks Satoru Moriya, Masaki Kimura)
+  resolves: rhbz#829427
+
 * Fri Jun 24 2011 Richard W.M. Jones <rjones@redhat.com> - 1.11-1.1
 - Rebase to virt-what 1.11.
   resolves: rhbz#672211

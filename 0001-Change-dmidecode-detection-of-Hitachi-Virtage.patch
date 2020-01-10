@@ -1,0 +1,29 @@
+From 08318065ff25ef23c2377d1425972b840a0a7204 Mon Sep 17 00:00:00 2001
+From: Masaki Kimura <masaki.kimura.kz@hitachi.com>
+Date: Tue, 18 Sep 2012 08:56:52 +0100
+Subject: [PATCH] Change dmidecode detection of Hitachi Virtage.
+
+Hitachi plans to change dmidecode output in the future release of
+Virtage.  By this change, some of Virtage models will not output "HVM"
+before LPAR in "Product Name" field, which current virt-what code uses
+to detect Virtage.  Therefore we need to change Virtage check routine.
+---
+ virt-what.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index cc5c93c..21488e7 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -153,7 +153,7 @@ fi
+ 
+ # Check for Hitachi Virtualization Manager (HVM) Virtage logical partitioning.
+ if echo "$dmi" | grep -q 'Manufacturer.*HITACHI' &&
+-   echo "$dmi" | grep -q 'Product.*HVM LPAR'; then
++   echo "$dmi" | grep -q 'Product.* LPAR'; then
+     echo virtage
+ fi
+ 
+-- 
+1.7.11.4
+
