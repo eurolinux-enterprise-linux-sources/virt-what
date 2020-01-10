@@ -1,0 +1,30 @@
+From 54fd76dc363792762223174a8e03c3e0cceddc48 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 10 Oct 2016 15:15:41 +0100
+Subject: [PATCH 44/44] Add documentation for bhyve.
+
+(cherry picked from commit 3a3ed10c4ce2185d708c8c3a10dd6a71ca64e777)
+---
+ virt-what.pod | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/virt-what.pod b/virt-what.pod
+index c7a211b..272be70 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -25,6 +25,12 @@ don't know about or cannot detect.
+ 
+ =over 4
+ 
++=item B<bhyve>
++
++This is a bhyve (FreeBSD hypervisor) guest.
++
++Status: contributed by Leonardo Brondani Schenkel.
++
+ =item B<docker>
+ 
+ This is a Docker container.
+-- 
+1.8.3.1
+

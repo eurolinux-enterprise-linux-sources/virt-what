@@ -1,0 +1,34 @@
+From a89a999eb100d080aa42ac1eab9ef4e57621595b Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 29 Jul 2013 15:20:52 +0100
+Subject: [PATCH 15/44] Ignore automake parallel-test files.
+
+(cherry picked from commit 54a7c622c3c413fb71fa31f8b2f4783ba0f530ee)
+---
+ .gitignore | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/.gitignore b/.gitignore
+index 3be575f..f565f34 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,5 +1,8 @@
+ *~
++*.log
++*.trs
+ *.o
++
+ /virt-what-*.tar.gz
+ /.deps
+ /Makefile
+@@ -18,6 +21,7 @@
+ /install-sh
+ /missing
+ /stamp-h1
++/test-driver
+ /virt-what
+ /virt-what-cpuid-helper
+ /virt-what.1
+-- 
+1.8.3.1
+

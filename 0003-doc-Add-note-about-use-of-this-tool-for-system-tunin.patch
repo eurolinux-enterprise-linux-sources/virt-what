@@ -1,0 +1,31 @@
+From d04c5954ce05ab3c670ad5cb4dbeabd8696f949d Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Fri, 25 May 2012 20:47:22 +0100
+Subject: [PATCH 03/44] doc: Add note about use of this tool for system tuning.
+
+(cherry picked from commit a2f08762bab023b0d1c65145df9d8578ef96217e)
+---
+ virt-what.pod | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/virt-what.pod b/virt-what.pod
+index 7769ee9..2ef5d08 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -229,6 +229,13 @@ tool.
+ 
+ You might include this information in status and monitoring programs.
+ 
++=item System tuning (sometimes)
++
++You might use this program to tune an operating system so it runs
++better as a virtual machine of a particular hypervisor.  However if
++installing paravirtualized drivers, it's better to check for the
++specific features your drivers need (eg. for the presence of PCI devices).
++
+ =back
+ 
+ =head1 SEE ALSO
+-- 
+1.8.3.1
+

@@ -1,0 +1,32 @@
+From a31c3a77e132697822fb76cf286023d8ca1b6297 Mon Sep 17 00:00:00 2001
+From: Andrew Jones <drjones@redhat.com>
+Date: Tue, 22 Sep 2015 18:29:08 +0200
+Subject: [PATCH 35/44] trivial: comment fixup
+
+dmidecode does now exist on non-PC architectures.
+
+(cherry picked from commit 1b0df165bad0cebbff2c1a5b234672a647ea75eb)
+---
+ virt-what.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 697595c..2de040a 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -94,9 +94,9 @@ fi
+ cpuid=$(virt-what-cpuid-helper)
+ 
+ # Check for various products in the BIOS information.
+-# Note that dmidecode doesn't exist on non-PC architectures.  On these,
+-# this will return an error which is ignored (error message redirected
+-# into $dmi variable).
++# Note that dmidecode doesn't exist on all architectures.  On the ones
++# it does not, then this will return an error, which is ignored (error
++# message redirected into the $dmi variable).
+ 
+ dmi=$(LANG=C dmidecode 2>&1)
+ 
+-- 
+1.8.3.1
+

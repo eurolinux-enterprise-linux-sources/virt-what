@@ -1,0 +1,30 @@
+From 4f45fd9a33e2778d4386a33a8dcd1b184aabfac5 Mon Sep 17 00:00:00 2001
+From: Assaf Gordon <assafgordon@gmail.com>
+Date: Mon, 15 Sep 2014 18:58:19 +0000
+Subject: [PATCH 24/44] virt-what.in: get effective uid in a portable way
+
+$EUID is bash-specific. Use the POSIX-compatible 'id -u' instead.
+
+(cherry picked from commit f82984fb84e9fed84aa71a50a1bfdfdc356771bd)
+---
+ virt-what.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 1532b90..3feeb60 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -74,8 +74,9 @@ exec_prefix=@exec_prefix@
+ PATH="${root}@libexecdir@:${root}/sbin:${root}/usr/sbin:${PATH}"
+ 
+ # Check we're running as root.
++EFFUID=$(id -u) || fail "failed to get current user id"
+ 
+-if [ "x$root" = "x" ] && [ "$EUID" -ne 0 ]; then
++if [ "x$root" = "x" ] && [ "$EFFUID" -ne 0 ]; then
+     fail "this script must be run as root"
+ fi
+ 
+-- 
+1.8.3.1
+

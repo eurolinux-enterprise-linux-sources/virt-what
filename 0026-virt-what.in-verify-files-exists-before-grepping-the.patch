@@ -1,0 +1,67 @@
+From 468ae304e6a02bd433c3f282fab9ab0a2f468269 Mon Sep 17 00:00:00 2001
+From: Assaf Gordon <assafgordon@gmail.com>
+Date: Mon, 15 Sep 2014 19:15:19 +0000
+Subject: [PATCH 26/44] virt-what.in: verify files exists before grepping them
+
+Don't grep linux-specific files (e.g. /proc/cpuinfo) unless they exist.
+This avoids extraneous errors on BSD/Hurd systems which don't have these
+files.
+
+(cherry picked from commit a68e9c005933a2d8d0f3264bdb68161263cd3933)
+---
+ virt-what.in | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 5ae1ccb..6e9aef1 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -33,6 +33,10 @@ skip_qemu_kvm=false
+ 
+ VERSION="@VERSION@"
+ 
++have_cpuinfo() {
++    test -e "${root}/proc/cpuinfo"
++}
++
+ fail() {
+     echo "virt-what: $1" >&2
+     exit 1
+@@ -152,7 +156,8 @@ if [ -e "${root}/proc/1/environ" ] &&
+ fi
+ 
+ # Check for Linux-VServer
+-if cat "${root}/proc/self/status" | grep -q "VxID: [0-9]*"; then
++if test -e "${root}/proc/self/status" \
++   && cat "${root}/proc/self/status" | grep -q "VxID: [0-9]*"; then
+     echo linux_vserver
+     if grep -q "VxID: 0$" "${root}/proc/self/status"; then
+         echo linux_vserver-host
+@@ -163,12 +168,13 @@ fi
+ 
+ # Check for UML.
+ # Added by Laurent Léonard.
+-if grep -q 'UML' "${root}/proc/cpuinfo"; then
++if have_cpuinfo && grep -q 'UML' "${root}/proc/cpuinfo"; then
+     echo uml
+ fi
+ 
+ # Check for IBM PowerVM Lx86 Linux/x86 emulator.
+-if grep -q '^vendor_id.*PowerVM Lx86' "${root}/proc/cpuinfo"; then
++if have_cpuinfo && grep -q '^vendor_id.*PowerVM Lx86' "${root}/proc/cpuinfo"
++then
+     echo powervm_lx86
+ fi
+ 
+@@ -179,7 +185,7 @@ if echo "$dmi" | grep -q 'Manufacturer.*HITACHI' &&
+ fi
+ 
+ # Check for IBM SystemZ.
+-if grep -q '^vendor_id.*IBM/S390' "${root}/proc/cpuinfo"; then
++if have_cpuinfo && grep -q '^vendor_id.*IBM/S390' "${root}/proc/cpuinfo"; then
+     echo ibm_systemz
+     if [ -f "${root}/proc/sysinfo" ]; then
+         if grep -q 'VM.*Control Program.*z/VM' "${root}/proc/sysinfo"; then
+-- 
+1.8.3.1
+

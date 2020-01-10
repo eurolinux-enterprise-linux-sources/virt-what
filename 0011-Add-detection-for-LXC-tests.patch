@@ -1,0 +1,231 @@
+From 4e7c7b15f038d94c63dc1faccf88bf94daee00de Mon Sep 17 00:00:00 2001
+From: Marc Fournier <marc.fournier@camptocamp.com>
+Date: Tue, 16 Apr 2013 22:20:30 +0200
+Subject: [PATCH 11/44] Add detection for LXC + tests
+
+(cherry picked from commit b4a8cdb672ec73e57219932c1d7d0093963b5642)
+---
+ Makefile.am                           |   8 +++++++
+ tests/lxc/proc/1/environ              | Bin 0 -> 152 bytes
+ tests/lxc/proc/cpuinfo                |  26 +++++++++++++++++++++++
+ tests/lxc/proc/self/status            |  39 ++++++++++++++++++++++++++++++++++
+ tests/lxc/sbin/dmidecode              |   6 ++++++
+ tests/lxc/sbin/uname                  |   2 ++
+ tests/lxc/sbin/virt-what-cpuid-helper |   2 ++
+ tests/test-lxc.sh                     |  34 +++++++++++++++++++++++++++++
+ virt-what.in                          |   9 ++++++++
+ 9 files changed, 126 insertions(+)
+ create mode 100644 tests/lxc/proc/1/environ
+ create mode 100644 tests/lxc/proc/cpuinfo
+ create mode 100644 tests/lxc/proc/self/status
+ create mode 100755 tests/lxc/sbin/dmidecode
+ create mode 100755 tests/lxc/sbin/uname
+ create mode 100755 tests/lxc/sbin/virt-what-cpuid-helper
+ create mode 100755 tests/test-lxc.sh
+
+diff --git a/Makefile.am b/Makefile.am
+index 4ddbb64..a381a2b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -45,6 +45,7 @@ TESTS = \
+ 	tests/test-kvm.sh \
+ 	tests/test-kvm-explicit-cpu.sh \
+ 	tests/test-linux-vserver.sh \
++	tests/test-lxc.sh \
+ 	tests/test-lx86.sh \
+ 	tests/test-parallels-desktop.sh \
+ 	tests/test-qemu.sh \
+@@ -93,6 +94,13 @@ EXTRA_DIST = \
+ 	tests/linux-vserver/sbin/id \
+ 	tests/linux-vserver/sbin/uname \
+ 	tests/linux-vserver/sbin/virt-what-cpuid-helper \
++	tests/lxc/proc/1/environ \
++	tests/lxc/proc/cpuinfo \
++	tests/lxc/proc/self/status \
++	tests/lxc/sbin/dmidecode \
++	tests/lxc/sbin/id \
++	tests/lxc/sbin/uname \
++	tests/lxc/sbin/virt-what-cpuid-helper \
+ 	tests/lx86/proc/cpuinfo \
+ 	tests/lx86/proc/self/status \
+ 	tests/lx86/sbin/dmidecode \
+diff --git a/tests/lxc/proc/1/environ b/tests/lxc/proc/1/environ
+new file mode 100644
+index 0000000000000000000000000000000000000000..cba6db0533e35a2a24aef54e0fd223d5ce7e1e83
+GIT binary patch
+literal 152
+zcmYL>K?=h#3<P!VXZ!*kj1f*jP9SQ|#R-8L5*u7o^8704p*QW$YJhF;(Lu0xM)Qf)
+z>@jVomeODn8u7ZiArSt`b3a*6`g8K$D!Dcf8Ur3}tvm4G|Gjj?s-9Ceb9}#m-7}Dg
+VDnuQctYQaC$t|Y5R@{ySZeO3LE$;vT
+
+literal 0
+HcmV?d00001
+
+diff --git a/tests/lxc/proc/cpuinfo b/tests/lxc/proc/cpuinfo
+new file mode 100644
+index 0000000..1b12948
+--- /dev/null
++++ b/tests/lxc/proc/cpuinfo
+@@ -0,0 +1,26 @@
++processor	: 0
++vendor_id	: GenuineIntel
++cpu family	: 15
++model		: 4
++model name	: Intel(R) Xeon(TM) CPU 3.80GHz
++stepping	: 3
++microcode	: 0x5
++cpu MHz		: 3790.823
++cache size	: 2048 KB
++physical id	: 0
++siblings	: 2
++core id		: 0
++cpu cores	: 1
++apicid		: 0
++initial apicid	: 0
++fpu		: yes
++fpu_exception	: yes
++cpuid level	: 5
++wp		: yes
++flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx lm constant_tsc pebs bts nopl pni dtes64 monitor ds_cpl est tm2 cid cx16 xtpr
++bogomips	: 7581.64
++clflush size	: 64
++cache_alignment	: 128
++address sizes	: 36 bits physical, 48 bits virtual
++power management:
++
+diff --git a/tests/lxc/proc/self/status b/tests/lxc/proc/self/status
+new file mode 100644
+index 0000000..6a4f213
+--- /dev/null
++++ b/tests/lxc/proc/self/status
+@@ -0,0 +1,39 @@
++Name:	cat
++State:	R (running)
++Tgid:	7424
++Pid:	7424
++PPid:	7216
++TracerPid:	0
++Uid:	0	0	0	0
++Gid:	0	0	0	0
++FDSize:	256
++Groups:	0 
++VmPeak:	    4112 kB
++VmSize:	    4112 kB
++VmLck:	       0 kB
++VmPin:	       0 kB
++VmHWM:	     320 kB
++VmRSS:	     320 kB
++VmData:	     180 kB
++VmStk:	     136 kB
++VmExe:	      48 kB
++VmLib:	    1664 kB
++VmPTE:	      32 kB
++VmSwap:	       0 kB
++Threads:	1
++SigQ:	4/63942
++SigPnd:	0000000000000000
++ShdPnd:	0000000000000000
++SigBlk:	0000000000000000
++SigIgn:	0000000000000000
++SigCgt:	0000000000000000
++CapInh:	0000000000000000
++CapPrm:	fffffffcff9effff
++CapEff:	fffffffcff9effff
++CapBnd:	fffffffcff9effff
++Cpus_allowed:	0f
++Cpus_allowed_list:	0-3
++Mems_allowed:	00000000,00000001
++Mems_allowed_list:	0
++voluntary_ctxt_switches:	1
++nonvoluntary_ctxt_switches:	1
+diff --git a/tests/lxc/sbin/dmidecode b/tests/lxc/sbin/dmidecode
+new file mode 100755
+index 0000000..d9992ad
+--- /dev/null
++++ b/tests/lxc/sbin/dmidecode
+@@ -0,0 +1,6 @@
++#!/bin/sh -
++cat <<'EOF'
++# dmidecode 2.11
++/dev/mem: Operation not permitted
++EOF
++exit 1
+diff --git a/tests/lxc/sbin/uname b/tests/lxc/sbin/uname
+new file mode 100755
+index 0000000..ab0ec89
+--- /dev/null
++++ b/tests/lxc/sbin/uname
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo x86_64
+diff --git a/tests/lxc/sbin/virt-what-cpuid-helper b/tests/lxc/sbin/virt-what-cpuid-helper
+new file mode 100755
+index 0000000..ad82504
+--- /dev/null
++++ b/tests/lxc/sbin/virt-what-cpuid-helper
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo @
+diff --git a/tests/test-lxc.sh b/tests/test-lxc.sh
+new file mode 100755
+index 0000000..47a5f2b
+--- /dev/null
++++ b/tests/test-lxc.sh
+@@ -0,0 +1,34 @@
++# Test for lxc
++# Copyright (C) 2008-2011 Red Hat Inc.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++root=tests/lxc
++
++output="$(./virt-what --test-root=$root 2>&1)"
++expected="lxc"
++
++if [ "$output" != "$expected" ]; then
++    echo "$0: test failed because output did not match expected"
++    echo "Expected output was:"
++    echo "----------------------------------------"
++    echo "$expected"
++    echo "----------------------------------------"
++    echo "But the actual output of the program was:"
++    echo "----------------------------------------"
++    echo "$output"
++    echo "----------------------------------------"
++    exit 1
++fi
+diff --git a/virt-what.in b/virt-what.in
+index 297956d..7cc4853 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -135,6 +135,15 @@ if [ -d $root/proc/vz -a ! -d $root/proc/bc ]; then
+     echo openvz
+ fi
+ 
++# Check for LXC containers
++# http://www.freedesktop.org/wiki/Software/systemd/ContainerInterface
++# Added by Marc Fournier
++
++if [ -e $root/proc/1/environ ] &&
++    cat $root/proc/1/environ | tr '\000' '\n' | grep -Eiq '^container='; then
++    echo lxc
++fi
++
+ # Check for Linux-VServer
+ if cat $root/proc/self/status | grep -q "VxID: [0-9]*"; then
+     echo linux_vserver
+-- 
+1.8.3.1
+

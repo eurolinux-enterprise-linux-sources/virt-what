@@ -1,0 +1,30 @@
+From a7f99d31dda620986047b7c9f17f7d0125f4ee86 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Wed, 17 Apr 2013 20:19:16 +0100
+Subject: [PATCH 14/44] Add lxc to virt-what man page.
+
+(cherry picked from commit c404f4997d98e3d8b15bbf01d436e838cd60c89a)
+---
+ virt-what.pod | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/virt-what.pod b/virt-what.pod
+index 2ef5d08..98cd4af 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -66,6 +66,12 @@ This process is running in a Linux VServer container.
+ 
+ Status: contributed by Barış Metin
+ 
++=item B<lxc>
++
++This process is running in a Linux LXC container.
++
++Status: contributed by Marc Fournier
++
+ =item B<kvm>
+ 
+ This guest is running on the KVM hypervisor using hardware
+-- 
+1.8.3.1
+

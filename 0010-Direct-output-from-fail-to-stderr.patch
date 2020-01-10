@@ -1,0 +1,41 @@
+From 529a4ee39442c3f254955e036b8e5172d15e7be1 Mon Sep 17 00:00:00 2001
+From: Todd Zullinger <tmz@pobox.com>
+Date: Tue, 2 Apr 2013 11:16:25 -0400
+Subject: [PATCH 10/44] Direct output from fail() to stderr
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This allows callers to more easily differentiate valid output from
+errors.  A recent example is facter.  When calling virt-what for its
+virtual fact, it gets 'virt-what: this script must be run as root' as
+the fact value when run as non-root:
+
+$ facter | grep ^virtual
+virtual => virt-what: this script must be run as root
+
+This is mildly related to RHBZ #719611¹.
+
+¹ https://bugzilla.redhat.com/show_bug.cgi?id=719611
+
+(cherry picked from commit 2f47e0615dab2bb16c2ad1e9f1273b3b709aea54)
+---
+ virt-what.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 21488e7..297956d 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -34,7 +34,7 @@ skip_qemu_kvm=false
+ VERSION="@VERSION@"
+ 
+ function fail {
+-    echo "virt-what: $1"
++    echo "virt-what: $1" >&2
+     exit 1
+ }
+ 
+-- 
+1.8.3.1
+

@@ -1,0 +1,26 @@
+From 44b196f0e2a63509f5543c0fd1ec82814f5aad0b Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 21 Apr 2015 12:12:45 +0100
+Subject: [PATCH 32/44] xen-arm: Fix path in EXTRA_DIST.
+
+(cherry picked from commit 5c4bdcf6abe012dbc4965e5bede00c8a9d31a8f6)
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 514d229..8a47e96 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -201,7 +201,7 @@ EXTRA_DIST = \
+ 	tests/rhel5-xen-domU-pv/sys/hypervisor/compilation/compile_date \
+ 	tests/rhel5-xen-domU-pv/sys/hypervisor/uuid \
+ 	tests/xen-arm/proc/cpuinfo \
+-	tests/xen-arm/proc/device-tree/compatible \
++	tests/xen-arm/proc/device-tree/hypervisor/compatible \
+ 	tests/xen-arm/proc/self/status \
+ 	tests/xen-arm/sbin/dmidecode \
+ 	tests/xen-arm/sbin/uname \
+-- 
+1.8.3.1
+

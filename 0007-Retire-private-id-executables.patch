@@ -1,0 +1,178 @@
+From fc634e724fbd236a28a2e32cb43c205db8d713f9 Mon Sep 17 00:00:00 2001
+From: Sami Kerola <kerolasa@iki.fi>
+Date: Thu, 19 Jul 2012 08:29:44 +0200
+Subject: [PATCH 07/44] Retire private id executables
+
+The main script is setting PATH to use id executable from rather
+strange directory.  That allowed checks to run without root
+privilege.  This change will make detection whether test run is
+been requested more universal, and to work without super setting
+id command.
+
+Signed-off-by: Sami Kerola <kerolasa@iki.fi>
+
+RWMJ:
+  - Use -ne instead of != to compare integers.
+
+(cherry picked from commit 8aa72773cebbc742d9378fed6b6ac13cb57b0eb3)
+---
+ tests/baremetal/sbin/id               | 2 --
+ tests/esx4.1/sbin/id                  | 2 --
+ tests/hyperv/sbin/id                  | 2 --
+ tests/kvm-explicit-cpu/sbin/id        | 2 --
+ tests/kvm/sbin/id                     | 2 --
+ tests/linux-vserver/sbin/id           | 2 --
+ tests/lx86/sbin/id                    | 2 --
+ tests/parallels-desktop/sbin/id       | 2 --
+ tests/qemu/sbin/id                    | 2 --
+ tests/rhel5-xen-dom0/sbin/id          | 2 --
+ tests/rhel5-xen-domU-hvm-ia64/sbin/id | 2 --
+ tests/rhel5-xen-domU-hvm/sbin/id      | 2 --
+ tests/rhel5-xen-domU-pv/sbin/id       | 2 --
+ tests/zvm/sbin/id                     | 2 --
+ virt-what.in                          | 3 +--
+ 15 files changed, 1 insertion(+), 30 deletions(-)
+ delete mode 100755 tests/baremetal/sbin/id
+ delete mode 100755 tests/esx4.1/sbin/id
+ delete mode 100755 tests/hyperv/sbin/id
+ delete mode 100755 tests/kvm-explicit-cpu/sbin/id
+ delete mode 100755 tests/kvm/sbin/id
+ delete mode 100755 tests/linux-vserver/sbin/id
+ delete mode 100755 tests/lx86/sbin/id
+ delete mode 100755 tests/parallels-desktop/sbin/id
+ delete mode 100755 tests/qemu/sbin/id
+ delete mode 100755 tests/rhel5-xen-dom0/sbin/id
+ delete mode 100755 tests/rhel5-xen-domU-hvm-ia64/sbin/id
+ delete mode 100755 tests/rhel5-xen-domU-hvm/sbin/id
+ delete mode 100755 tests/rhel5-xen-domU-pv/sbin/id
+ delete mode 100755 tests/zvm/sbin/id
+
+diff --git a/tests/baremetal/sbin/id b/tests/baremetal/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/baremetal/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/esx4.1/sbin/id b/tests/esx4.1/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/esx4.1/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/hyperv/sbin/id b/tests/hyperv/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/hyperv/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/kvm-explicit-cpu/sbin/id b/tests/kvm-explicit-cpu/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/kvm-explicit-cpu/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/kvm/sbin/id b/tests/kvm/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/kvm/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/linux-vserver/sbin/id b/tests/linux-vserver/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/linux-vserver/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/lx86/sbin/id b/tests/lx86/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/lx86/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/parallels-desktop/sbin/id b/tests/parallels-desktop/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/parallels-desktop/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/qemu/sbin/id b/tests/qemu/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/qemu/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/rhel5-xen-dom0/sbin/id b/tests/rhel5-xen-dom0/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/rhel5-xen-dom0/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/rhel5-xen-domU-hvm-ia64/sbin/id b/tests/rhel5-xen-domU-hvm-ia64/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/rhel5-xen-domU-hvm-ia64/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/rhel5-xen-domU-hvm/sbin/id b/tests/rhel5-xen-domU-hvm/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/rhel5-xen-domU-hvm/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/rhel5-xen-domU-pv/sbin/id b/tests/rhel5-xen-domU-pv/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/rhel5-xen-domU-pv/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/tests/zvm/sbin/id b/tests/zvm/sbin/id
+deleted file mode 100755
+index 6c704ac..0000000
+--- a/tests/zvm/sbin/id
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh -
+-echo 0
+diff --git a/virt-what.in b/virt-what.in
+index d62f7c8..cc5c93c 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -75,8 +75,7 @@ PATH=$root@libexecdir@:$root/sbin:$root/usr/sbin:$PATH
+ 
+ # Check we're running as root.
+ 
+-uid=`id -u`
+-if [ "$uid" != 0 ]; then
++if [ "x$root" = "x" ] && [ "$EUID" -ne 0 ]; then
+     fail "this script must be run as root"
+ fi
+ 
+-- 
+1.8.3.1
+

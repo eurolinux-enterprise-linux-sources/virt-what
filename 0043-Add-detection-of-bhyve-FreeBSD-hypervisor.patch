@@ -1,0 +1,312 @@
+From 1b4cc828d20692778ad49ffd54441e8bbaaba0b9 Mon Sep 17 00:00:00 2001
+From: Leonardo Brondani Schenkel <leonardo@schenkel.net>
+Date: Sat, 17 Sep 2016 12:59:52 +0000
+Subject: [PATCH 43/44] Add detection of bhyve (FreeBSD hypervisor)
+
+(cherry picked from commit 01b89651194cc3a9a9ceb8268f50dc1ea00d61fe)
+---
+ Makefile.am                             |   1 +
+ tests/bhyve/proc/cpuinfo                |   0
+ tests/bhyve/sbin/dmidecode              | 193 ++++++++++++++++++++++++++++++++
+ tests/bhyve/sbin/uname                  |   2 +
+ tests/bhyve/sbin/virt-what-cpuid-helper |   2 +
+ tests/test-bhyve.sh                     |  34 ++++++
+ virt-what.in                            |   7 ++
+ 7 files changed, 239 insertions(+)
+ create mode 100644 tests/bhyve/proc/cpuinfo
+ create mode 100755 tests/bhyve/sbin/dmidecode
+ create mode 100755 tests/bhyve/sbin/uname
+ create mode 100755 tests/bhyve/sbin/virt-what-cpuid-helper
+ create mode 100755 tests/test-bhyve.sh
+
+diff --git a/Makefile.am b/Makefile.am
+index d5ee027..e32c07c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -40,6 +40,7 @@ endif
+ 
+ TESTS = \
+ 	tests/test-baremetal.sh \
++	tests/test-bhyve.sh \
+ 	tests/test-docker.sh \
+ 	tests/test-esx4.1.sh \
+ 	tests/test-hyperv.sh \
+diff --git a/tests/bhyve/proc/cpuinfo b/tests/bhyve/proc/cpuinfo
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/bhyve/sbin/dmidecode b/tests/bhyve/sbin/dmidecode
+new file mode 100755
+index 0000000..b8e4d80
+--- /dev/null
++++ b/tests/bhyve/sbin/dmidecode
+@@ -0,0 +1,193 @@
++#!/bin/sh -
++cat <<'EOF'
++# dmidecode 3.0
++Getting SMBIOS data from sysfs.
++SMBIOS 2.6 present.
++12 structures occupying 562 bytes.
++Table at 0x000F101F.
++
++Handle 0x0001, DMI type 0, 24 bytes
++BIOS Information
++	Vendor: BHYVE
++	Version: 1.00
++	Release Date: 03/14/2014
++	Address: 0xF0000
++	Runtime Size: 64 kB
++	ROM Size: 64 kB
++	Characteristics:
++		ISA is supported
++		PCI is supported
++		BIOS shadowing is allowed
++		Boot from CD is supported
++		EDD is supported
++		ACPI is supported
++		BIOS boot specification is supported
++		System is a virtual machine
++	BIOS Revision: 0.0
++
++Handle 0x0002, DMI type 1, 27 bytes
++System Information
++	Manufacturer:  
++	Product Name: BHYVE
++	Version: 1.0
++	Serial Number: None
++	UUID: 5420C3C9-6963-5F33-A700-11604F0FCDF2
++	Wake-up Type: Power Switch
++	SKU Number: None
++	Family:  
++
++Handle 0x0003, DMI type 3, 18 bytes
++Chassis Information
++	Manufacturer:  
++	Type: Unknown
++	Lock: Not Present
++	Version: 1.0
++	Serial Number: None
++	Asset Tag: None
++	Boot-up State: Safe
++	Power Supply State: Safe
++	Thermal State: Safe
++	Security Status: None
++	OEM Information: 0x00000000
++
++Handle 0x0004, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU #0
++	Type: Central Processor
++	Family: Other
++	Manufacturer:  
++	ID: 00 00 00 00 00 00 00 00
++	Version:  
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: Unknown
++	Current Speed: Unknown
++	Status: Populated, Enabled
++	Upgrade: None
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: None
++	Asset Tag: None
++	Part Number: None
++	Characteristics:
++		64-bit capable
++
++Handle 0x0005, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU #1
++	Type: Central Processor
++	Family: Other
++	Manufacturer:  
++	ID: 00 00 00 00 00 00 00 00
++	Version:  
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: Unknown
++	Current Speed: Unknown
++	Status: Populated, Enabled
++	Upgrade: None
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: None
++	Asset Tag: None
++	Part Number: None
++	Characteristics:
++		64-bit capable
++
++Handle 0x0006, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU #2
++	Type: Central Processor
++	Family: Other
++	Manufacturer:  
++	ID: 00 00 00 00 00 00 00 00
++	Version:  
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: Unknown
++	Current Speed: Unknown
++	Status: Populated, Enabled
++	Upgrade: None
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: None
++	Asset Tag: None
++	Part Number: None
++	Characteristics:
++		64-bit capable
++
++Handle 0x0007, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU #3
++	Type: Central Processor
++	Family: Other
++	Manufacturer:  
++	ID: 00 00 00 00 00 00 00 00
++	Version:  
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: Unknown
++	Current Speed: Unknown
++	Status: Populated, Enabled
++	Upgrade: None
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: None
++	Asset Tag: None
++	Part Number: None
++	Characteristics:
++		64-bit capable
++
++Handle 0x0008, DMI type 16, 23 bytes
++Physical Memory Array
++	Location: System Board Or Motherboard
++	Use: System Memory
++	Error Correction Type: None
++	Maximum Capacity: 2 GB
++	Error Information Handle: No Error
++	Number Of Devices: 1
++
++Handle 0x0009, DMI type 17, 40 bytes
++Memory Device
++	Array Handle: 0x0007
++	Error Information Handle: No Error
++	Total Width: 64 bits
++	Data Width: 64 bits
++	Size: 0 TB
++	Form Factor: Unknown
++	Set: None
++	Locator:  
++	Bank Locator:  
++	Type: Unknown
++	Type Detail: Unknown
++	Speed: Unknown
++	Manufacturer:  
++	Serial Number: None
++	Asset Tag: None
++	Part Number: None
++	Rank: Unknown
++	Configured Clock Speed: Unknown
++	Minimum Voltage: Unknown
++	Maximum Voltage: Unknown
++	Configured Voltage: Unknown
++
++Handle 0x000A, DMI type 19, 31 bytes
++Memory Array Mapped Address
++	Starting Address: 0x0000000000000000k
++	Ending Address: 0x0000000080000000k
++	Range Size: 2 GB
++	Physical Array Handle: 0x0007
++	Partition Width: 1
++
++Handle 0x000B, DMI type 32, 11 bytes
++System Boot Information
++	Status: No errors detected
++
++Handle 0x000C, DMI type 127, 4 bytes
++End Of Table
++
++EOF
+diff --git a/tests/bhyve/sbin/uname b/tests/bhyve/sbin/uname
+new file mode 100755
+index 0000000..ab0ec89
+--- /dev/null
++++ b/tests/bhyve/sbin/uname
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo x86_64
+diff --git a/tests/bhyve/sbin/virt-what-cpuid-helper b/tests/bhyve/sbin/virt-what-cpuid-helper
+new file mode 100755
+index 0000000..e562974
+--- /dev/null
++++ b/tests/bhyve/sbin/virt-what-cpuid-helper
+@@ -0,0 +1,2 @@
++#!/bin/sh
++echo 'bhyve bhyve '
+diff --git a/tests/test-bhyve.sh b/tests/test-bhyve.sh
+new file mode 100755
+index 0000000..a66b3b4
+--- /dev/null
++++ b/tests/test-bhyve.sh
+@@ -0,0 +1,34 @@
++# Test for bhyve
++# Copyright (C) 2008-2011 Red Hat Inc.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++root=tests/bhyve
++
++output="$(./virt-what --test-root=$root 2>&1)"
++expected="bhyve"
++
++if [ "$output" != "$expected" ]; then
++    echo "$0: test failed because output did not match expected"
++    echo "Expected output was:"
++    echo "----------------------------------------"
++    echo "$expected"
++    echo "----------------------------------------"
++    echo "But the actual output of the program was:"
++    echo "----------------------------------------"
++    echo "$output"
++    echo "----------------------------------------"
++    exit 1
++fi
+diff --git a/virt-what.in b/virt-what.in
+index 761fc1b..1a373ed 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -134,6 +134,13 @@ if echo "$dmi" | grep -q 'Manufacturer: innotek GmbH'; then
+     echo virtualbox
+ fi
+ 
++# Check for bhyve.
++if [ "$cpuid" = "bhyve bhyve " ]; then
++  echo bhyve
++elif echo "$dmi" | grep -q "Vendor: BHYVE"; then
++  echo bhyve
++fi
++
+ # Check for OpenVZ / Virtuozzo.
+ # Added by Evgeniy Sokolov.
+ # /proc/vz - always exists if OpenVZ kernel is running (inside and outside
+-- 
+1.8.3.1
+

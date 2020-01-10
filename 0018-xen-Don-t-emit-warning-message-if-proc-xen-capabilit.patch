@@ -1,0 +1,36 @@
+From eab67e2c2d9fcf75f9600b21f68f8cfe5129d67e Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 28 Oct 2013 11:09:24 +0000
+Subject: [PATCH 18/44] xen: Don't emit warning message if
+ /proc/xen/capabilities file does not exist.
+
+On Amazon EC2:
+
+xen
+grep: /proc/xen/capabilities: No such file or directory
+xen-domU
+
+The warning is harmless but should not be printed.
+
+Thanks: Can Zhang for testing.
+(cherry picked from commit 8709c0e87dc3124b1a64d85654d6d4904702d767)
+---
+ virt-what.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index bf663aa..4b6d3b8 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -199,7 +199,7 @@ if [ "$cpuid" = "XenVMMXenVMM" ]; then
+     skip_qemu_kvm=true
+ elif [ -d "${root}/proc/xen" ]; then
+     echo xen
+-    if grep -q "control_d" "${root}/proc/xen/capabilities"; then
++    if grep -q "control_d" "${root}/proc/xen/capabilities" 2>/dev/null; then
+         echo xen-dom0
+     else
+         echo xen-domU
+-- 
+1.8.3.1
+

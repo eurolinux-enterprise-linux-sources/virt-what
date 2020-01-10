@@ -1,0 +1,26 @@
+From feb150cf15638a55f56a8932645778cae9c77bb7 Mon Sep 17 00:00:00 2001
+From: nodata <lsof@nodata.co.uk>
+Date: Mon, 2 Sep 2013 16:59:32 +0100
+Subject: [PATCH 17/44] Detect new Xen VMs (RHBZ#973663).
+
+(cherry picked from commit acd6bec92a99550ad98011d44f6381fdf7fa5992)
+---
+ virt-what.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 422f6d0..bf663aa 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -197,7 +197,7 @@ fi
+ if [ "$cpuid" = "XenVMMXenVMM" ]; then
+     echo xen; echo xen-hvm
+     skip_qemu_kvm=true
+-elif [ -f "${root}/proc/xen/capabilities" ]; then
++elif [ -d "${root}/proc/xen" ]; then
+     echo xen
+     if grep -q "control_d" "${root}/proc/xen/capabilities"; then
+         echo xen-dom0
+-- 
+1.8.3.1
+

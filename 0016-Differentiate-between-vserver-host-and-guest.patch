@@ -1,0 +1,73 @@
+From 659b0fed68edfa90a601760f188e675b5b9247bd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Elan=20Ruusam=C3=A4e?= <glen@pld-linux.org>
+Date: Mon, 2 Sep 2013 15:24:11 +0100
+Subject: [PATCH 16/44] Differentiate between vserver host and guest.
+
+RWMJ: Update documentation and tests.
+(cherry picked from commit d409914d13b88541402fe871d70e3dff9d738455)
+---
+ tests/test-linux-vserver.sh |  3 ++-
+ virt-what.in                |  5 +++++
+ virt-what.pod               | 12 ++++++++++++
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test-linux-vserver.sh b/tests/test-linux-vserver.sh
+index 40d75a5..7988f81 100755
+--- a/tests/test-linux-vserver.sh
++++ b/tests/test-linux-vserver.sh
+@@ -19,7 +19,8 @@
+ root=tests/linux-vserver
+ 
+ output="$(./virt-what --test-root=$root 2>&1)"
+-expected="linux_vserver"
++expected="linux_vserver
++linux_vserver-guest"
+ 
+ if [ "$output" != "$expected" ]; then
+     echo "$0: test failed because output did not match expected"
+diff --git a/virt-what.in b/virt-what.in
+index f12c95b..422f6d0 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -147,6 +147,11 @@ fi
+ # Check for Linux-VServer
+ if cat "${root}/proc/self/status" | grep -q "VxID: [0-9]*"; then
+     echo linux_vserver
++    if grep -q "VxID: 0$" "${root}/proc/self/status"; then
++        echo linux_vserver-host
++    else
++        echo linux_vserver-guest
++    fi
+ fi
+ 
+ # Check for UML.
+diff --git a/virt-what.pod b/virt-what.pod
+index 98cd4af..bff2998 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -62,10 +62,22 @@ Status: confirmed by RWMJ using a Fedora guest running in z/VM
+ 
+ =item B<linux_vserver>
+ 
++This is printed for backwards compatibility with older virt-what which
++could not distinguish between a Linux VServer container guest and
++host.
++
++=item B<linux_vserver-guest>
++
+ This process is running in a Linux VServer container.
+ 
+ Status: contributed by Barış Metin
+ 
++=item B<linux_vserver-host>
++
++This process is running as the Linux VServer host (VxID 0).
++
++Status: contributed by Barış Metin and Elan Ruusamäe
++
+ =item B<lxc>
+ 
+ This process is running in a Linux LXC container.
+-- 
+1.8.3.1
+

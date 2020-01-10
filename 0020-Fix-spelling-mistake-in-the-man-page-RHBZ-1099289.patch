@@ -1,0 +1,26 @@
+From c826a2356f1434fd02f152ae34516941b385a526 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 20 May 2014 10:50:39 +0100
+Subject: [PATCH 20/44] Fix spelling mistake in the man page (RHBZ#1099289).
+
+(cherry picked from commit 1efaa88391668a73d3c2c0cd96dfb5103ecf3975)
+---
+ virt-what.pod | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.pod b/virt-what.pod
+index bff2998..bcafd26 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -113,7 +113,7 @@ Status: contributed by Justin Clift
+ 
+ The guest is running inside IBM PowerVM Lx86 Linux/x86 emulator.
+ 
+-Status: data originally supplied by Jeffrey Scheel, confimed by
++Status: data originally supplied by Jeffrey Scheel, confirmed by
+ Yufang Zhang and RWMJ
+ 
+ =item B<qemu>
+-- 
+1.8.3.1
+

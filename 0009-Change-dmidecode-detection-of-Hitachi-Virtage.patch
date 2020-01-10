@@ -1,12 +1,14 @@
-From 08318065ff25ef23c2377d1425972b840a0a7204 Mon Sep 17 00:00:00 2001
+From f3ef37faa0c6d1dbf03f25cd95c5ae252fd1472f Mon Sep 17 00:00:00 2001
 From: Masaki Kimura <masaki.kimura.kz@hitachi.com>
 Date: Tue, 18 Sep 2012 08:56:52 +0100
-Subject: [PATCH] Change dmidecode detection of Hitachi Virtage.
+Subject: [PATCH 09/44] Change dmidecode detection of Hitachi Virtage.
 
 Hitachi plans to change dmidecode output in the future release of
 Virtage.  By this change, some of Virtage models will not output "HVM"
 before LPAR in "Product Name" field, which current virt-what code uses
 to detect Virtage.  Therefore we need to change Virtage check routine.
+
+(cherry picked from commit 08318065ff25ef23c2377d1425972b840a0a7204)
 ---
  virt-what.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -25,5 +27,5 @@ index cc5c93c..21488e7 100644
  fi
  
 -- 
-1.7.11.4
+1.8.3.1
 

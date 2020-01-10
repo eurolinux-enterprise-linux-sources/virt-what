@@ -1,12 +1,14 @@
-From d87e9cbae34b22c89e6094263ae44567f5b5bd90 Mon Sep 17 00:00:00 2001
+From 60a7ee0f70ea79610e852986f2732d571ee49fba Mon Sep 17 00:00:00 2001
 From: "Richard W.M. Jones" <rjones@redhat.com>
 Date: Fri, 27 May 2011 12:28:28 +0100
-Subject: [PATCH] IA64 Xen HVM should print 'xen-hvm' not 'xen-domU'.
+Subject: [PATCH 01/44] IA64 Xen HVM should print 'xen-hvm' not 'xen-domU'.
 
 This updates commit 3ea952163f0c28cd88f8473bb015df892c4247bf.
+
+(cherry picked from commit d87e9cbae34b22c89e6094263ae44567f5b5bd90)
 ---
- tests/test-rhel5-xen-domU-hvm-ia64.sh |    2 +-
- virt-what.in                          |    2 +-
+ tests/test-rhel5-xen-domU-hvm-ia64.sh | 2 +-
+ virt-what.in                          | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tests/test-rhel5-xen-domU-hvm-ia64.sh b/tests/test-rhel5-xen-domU-hvm-ia64.sh
@@ -36,5 +38,5 @@ index 74ffab2..4f381ab 100644
          # There is no virt leaf on IA64 HVM.  This is a last-ditch
          # attempt to detect something is virtualized by using a
 -- 
-1.7.5.2
+1.8.3.1
 
