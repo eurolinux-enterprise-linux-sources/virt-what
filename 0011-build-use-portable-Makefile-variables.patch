@@ -1,0 +1,31 @@
+From 243928da395080d7895111d5e5c0f1ff5f9e95fb Mon Sep 17 00:00:00 2001
+From: "A. Gordon" <assafgordon@gmail.com>
+Date: Mon, 15 Sep 2014 15:51:50 -0400
+Subject: [PATCH 11/16] build: use portable Makefile variables
+
+* Makefile.am: use '$?' instead of '$<'
+  $< in a non-inference rule is a GNU-make extension, which fails with
+  BSD make.
+---
+ Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 24d1730..1c14948 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -32,9 +32,9 @@ man_MANS = virt-what.1
+ 
+ virt-what.1: virt-what.pod
+ 	pod2man -c "Virtualization Support" --release "$(PACKAGE)-$(VERSION)" \
+-	  $< > $@
++	  $? > $@
+ virt-what.txt: virt-what.pod
+-	pod2text $< > $@
++	pod2text $? > $@
+ 
+ endif
+ 
+-- 
+2.3.1
+

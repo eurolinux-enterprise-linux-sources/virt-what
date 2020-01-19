@@ -1,0 +1,29 @@
+From 902276acb3c0f92fc08c618cbbba18e9bee5a38f Mon Sep 17 00:00:00 2001
+From: Charles Nguyen <chuckleb@gmail.com>
+Date: Sat, 21 Jun 2014 23:43:05 -0500
+Subject: [PATCH 05/16] Added documentation for Docker tests
+
+---
+ virt-what.pod | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/virt-what.pod b/virt-what.pod
+index bcafd26..8fd9bc4 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -25,6 +25,12 @@ don't know about or cannot detect.
+ 
+ =over 4
+ 
++=item B<docker>
++
++This is a Docker container.
++
++Status: confirmed by Charles Nguyen
++
+ =item B<hyperv>
+ 
+ This is Microsoft Hyper-V hypervisor.
+-- 
+2.3.1
+

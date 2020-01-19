@@ -1,0 +1,39 @@
+From 6382ef1cb5b8c146bfd35912730dccd68ab4b71a Mon Sep 17 00:00:00 2001
+From: "A. Gordon" <assafgordon@gmail.com>
+Date: Mon, 15 Sep 2014 14:48:23 -0400
+Subject: [PATCH 06/16] virt-what.in: remove bash-ism
+
+Use '/bin/sh' instead of '/bin/bash', with POSIX-compatible function
+definitions.
+---
+ virt-what.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index c04203e..1532b90 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -1,4 +1,4 @@
+-#!/bin/bash -
++#!/bin/sh -
+ # @configure_input@
+ # Copyright (C) 2008-2011 Red Hat Inc.
+ #
+@@ -33,12 +33,12 @@ skip_qemu_kvm=false
+ 
+ VERSION="@VERSION@"
+ 
+-function fail {
++fail() {
+     echo "virt-what: $1" >&2
+     exit 1
+ }
+ 
+-function usage {
++usage() {
+     echo "virt-what [options]"
+     echo "Options:"
+     echo "  --help          Display this help"
+-- 
+2.3.1
+

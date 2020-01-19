@@ -1,6 +1,6 @@
 Name:           virt-what
 Version:        1.13
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Detect if we are running in a virtual machine
 License:        GPLv2+
 
@@ -10,6 +10,21 @@ Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{versi
 Patch1:         0001-Differentiate-between-vserver-host-and-guest.patch
 Patch2:         0002-Detect-new-Xen-VMs-RHBZ-973663.patch
 Patch3:         0001-xen-Don-t-emit-warning-message-if-proc-xen-capabilit.patch
+Patch4:         0001-Fix-various-typos-and-mistakes-in-comments.patch
+Patch5:         0003-Fix-spelling-mistake-in-the-man-page-RHBZ-1099289.patch
+Patch6:         0004-Added-check-and-test-routines-for-Docker.patch
+Patch7:         0005-Added-documentation-for-Docker-tests.patch
+Patch8:         0006-virt-what.in-remove-bash-ism.patch
+Patch9:         0007-virt-what.in-get-effective-uid-in-a-portable-way.patch
+Patch10:        0008-virt-what.in-warn-about-missing-cpuid-virt-helper-pr.patch
+Patch11:        0009-virt-what.in-verify-files-exists-before-grepping-the.patch
+Patch12:        0010-virt-what.in-make-option-processing-portable.patch
+Patch13:        0011-build-use-portable-Makefile-variables.patch
+Patch14:        0012-Add-space-before-parens-in-function-defns-for-readab.patch
+Patch15:        0013-Add-lkvm-detection.patch
+Patch16:        0014-Add-ARM-support.patch
+Patch17:        0015-xen-arm-Fix-path-in-EXTRA_DIST.patch
+
 
 # This is provided by the build root, but we make it explicit
 # anyway in case this was dropped from the build root in future.
@@ -17,6 +32,12 @@ BuildRequires:  /usr/bin/pod2man
 
 # Required at build time in order to do 'make check' (for getopt).
 BuildRequires:  util-linux
+
+# git is used for patch management.  Since some patches touch autoconf
+# files, we must also install autotools.
+BuildRequires:  git
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 # virt-what script uses dmidecode and getopt (from util-linux).
 # RPM cannot detect this so make the dependencies explicit here.
@@ -59,9 +80,14 @@ Current types of virtualization detected:
 %prep
 %setup -q
 
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+# Use git to manage patches.
+# http://rwmj.wordpress.com/2011/08/09/nice-rpm-git-patch-management-trick/
+git init
+git config user.email "rjones@redhat.com"
+git config user.name "virt-what"
+git add .
+git commit -a -q -m "%{version} baseline"
+git am %{patches}
 
 
 %build
@@ -85,6 +111,11 @@ make check
 
 
 %changelog
+* Tue Apr 21 2015 Richard W.M. Jones <rjones@redhat.com> - 1.13-6
+- Fix detection of aarch64
+  resolves: rhbz#1201845
+  Add all commits to version 1.15.
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.13-5
 - Mass rebuild 2014-01-24
 
