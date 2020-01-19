@@ -1,8 +1,8 @@
 From 8709c0e87dc3124b1a64d85654d6d4904702d767 Mon Sep 17 00:00:00 2001
 From: "Richard W.M. Jones" <rjones@redhat.com>
 Date: Mon, 28 Oct 2013 11:09:24 +0000
-Subject: [PATCH 03/27] xen: Don't emit warning message if
- /proc/xen/capabilities file does not exist.
+Subject: [PATCH] xen: Don't emit warning message if /proc/xen/capabilities
+ file does not exist.
 
 On Amazon EC2:
 
@@ -31,5 +31,5 @@ index bf663aa..4b6d3b8 100644
      else
          echo xen-domU
 -- 
-2.10.2
+1.8.3.1
 
