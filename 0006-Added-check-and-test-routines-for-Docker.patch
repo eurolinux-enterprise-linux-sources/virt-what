@@ -1,0 +1,142 @@
+From 89765910064584ebaea7a9899838a2cb66740d26 Mon Sep 17 00:00:00 2001
+From: Charles Nguyen <chuckleb@gmail.com>
+Date: Sat, 21 Jun 2014 22:27:51 -0500
+Subject: [PATCH 06/27] Added check and test routines for Docker
+
+---
+ Makefile.am                              |  7 +++++++
+ tests/docker/.dockerinit                 |  0
+ tests/docker/proc/cpuinfo                |  0
+ tests/docker/proc/self/status            |  0
+ tests/docker/sbin/dmidecode              |  6 ++++++
+ tests/docker/sbin/uname                  |  2 ++
+ tests/docker/sbin/virt-what-cpuid-helper |  2 ++
+ tests/test-docker.sh                     | 34 ++++++++++++++++++++++++++++++++
+ virt-what.in                             |  5 +++++
+ 9 files changed, 56 insertions(+)
+ create mode 100644 tests/docker/.dockerinit
+ create mode 100644 tests/docker/proc/cpuinfo
+ create mode 100644 tests/docker/proc/self/status
+ create mode 100755 tests/docker/sbin/dmidecode
+ create mode 100755 tests/docker/sbin/uname
+ create mode 100755 tests/docker/sbin/virt-what-cpuid-helper
+ create mode 100755 tests/test-docker.sh
+
+diff --git a/Makefile.am b/Makefile.am
+index 784d6db..24d1730 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -40,6 +40,7 @@ endif
+ 
+ TESTS = \
+ 	tests/test-baremetal.sh \
++	tests/test-docker.sh \
+ 	tests/test-esx4.1.sh \
+ 	tests/test-hyperv.sh \
+ 	tests/test-kvm.sh \
+@@ -63,6 +64,12 @@ EXTRA_DIST = \
+ 	tests/baremetal/sbin/dmidecode \
+ 	tests/baremetal/sbin/uname \
+ 	tests/baremetal/sbin/virt-what-cpuid-helper \
++	tests/docker/.dockerinit \
++	tests/docker/proc/cpuinfo \
++	tests/docker/proc/self/status \
++	tests/docker/sbin/dmidecode \
++	tests/docker/sbin/uname \
++	tests/docker/sbin/virt-what-cpuid-helper \
+ 	tests/esx4.1/proc/cpuinfo \
+ 	tests/esx4.1/proc/self/status \
+ 	tests/esx4.1/sbin/dmidecode \
+diff --git a/tests/docker/.dockerinit b/tests/docker/.dockerinit
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/docker/proc/cpuinfo b/tests/docker/proc/cpuinfo
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/docker/proc/self/status b/tests/docker/proc/self/status
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/docker/sbin/dmidecode b/tests/docker/sbin/dmidecode
+new file mode 100755
+index 0000000..d9992ad
+--- /dev/null
++++ b/tests/docker/sbin/dmidecode
+@@ -0,0 +1,6 @@
++#!/bin/sh -
++cat <<'EOF'
++# dmidecode 2.11
++/dev/mem: Operation not permitted
++EOF
++exit 1
+diff --git a/tests/docker/sbin/uname b/tests/docker/sbin/uname
+new file mode 100755
+index 0000000..ab0ec89
+--- /dev/null
++++ b/tests/docker/sbin/uname
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo x86_64
+diff --git a/tests/docker/sbin/virt-what-cpuid-helper b/tests/docker/sbin/virt-what-cpuid-helper
+new file mode 100755
+index 0000000..ad82504
+--- /dev/null
++++ b/tests/docker/sbin/virt-what-cpuid-helper
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo @
+diff --git a/tests/test-docker.sh b/tests/test-docker.sh
+new file mode 100755
+index 0000000..4187f61
+--- /dev/null
++++ b/tests/test-docker.sh
+@@ -0,0 +1,34 @@
++# Test for Docker
++# Copyright (C) 2008-2011 Red Hat Inc.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++root=tests/docker
++
++output="$(./virt-what --test-root=$root 2>&1)"
++expected="docker"
++
++if [ "$output" != "$expected" ]; then
++    echo "$0: test failed because output did not match expected"
++    echo "Expected output was:"
++    echo "----------------------------------------"
++    echo "$expected"
++    echo "----------------------------------------"
++    echo "But the actual output of the program was:"
++    echo "----------------------------------------"
++    echo "$output"
++    echo "----------------------------------------"
++    exit 1
++fi
+diff --git a/virt-what.in b/virt-what.in
+index fb399be..c04203e 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -248,3 +248,8 @@ if ! "$skip_qemu_kvm"; then
+ 	fi
+     fi
+ fi
++
++# Check for Docker.
++if [ -f "${root}/.dockerinit" ]; then
++	echo docker
++fi
+-- 
+2.10.2
+
