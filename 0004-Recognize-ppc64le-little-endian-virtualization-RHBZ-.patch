@@ -1,0 +1,28 @@
+From 7db94c8fe63f2c7ec3ac27cc5ff54ec1e1686aeb Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 17 Oct 2017 14:47:09 +0100
+Subject: [PATCH 4/4] Recognize ppc64le (little endian) virtualization
+ (RHBZ#1147876).
+
+Tested by Laurent Vivier, see:
+https://bugzilla.redhat.com/show_bug.cgi?id=1147876#c35 & ff.
+---
+ virt-what.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index 247348e..29b7b0d 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -339,7 +339,7 @@ fi
+ # example /proc/ppc64/lparcfg systemtype line
+ # system_type=IBM pSeries (emulated by qemu)
+ 
+-if [ "$arch" = "ppc64" ]; then
++if [ "$arch" = "ppc64" ] || [ "$arch" = "ppc64le" ] ; then
+     if have_cpuinfo && grep -q 'platform.**pSeries' "${root}/proc/cpuinfo"; then
+         if grep -q 'model.*emulated by qemu' "${root}/proc/cpuinfo"; then
+                 echo ibm_power-kvm
+-- 
+2.13.2
+
