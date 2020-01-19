@@ -1,7 +1,7 @@
-From aec669f7b9e4a172c57978597916f8bd97bf26de Mon Sep 17 00:00:00 2001
+From 5d4106eafd7f2f6e71a1d0d90ebf4f4e766b772d Mon Sep 17 00:00:00 2001
 From: Assaf Gordon <assafgordon@gmail.com>
 Date: Mon, 15 Sep 2014 19:34:06 +0000
-Subject: [PATCH 10/16] virt-what.in: make option processing portable
+Subject: [PATCH 12/26] virt-what.in: make option processing portable
 
 Replace linux-specific 'getopt' usage with manual option parsing.
 Because the used option are version simple (help/version) and the only
@@ -48,5 +48,5 @@ index 6e9aef1..f2c0b90 100644
  # Add /sbin and /usr/sbin to the path so we can find system
  # binaries like dmidecode.
 -- 
-2.3.1
+1.8.3.1
 

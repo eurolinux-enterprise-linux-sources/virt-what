@@ -1,0 +1,71 @@
+From 4b9101e34d9e5f9c05131161a9702cf1f37e4792 Mon Sep 17 00:00:00 2001
+From: Andrew Jones <drjones@redhat.com>
+Date: Tue, 27 Oct 2015 18:16:02 +0100
+Subject: [PATCH 22/26] trivial: virt-what.in doesn't use tabs
+
+---
+ virt-what.in | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/virt-what.in b/virt-what.in
+index d37da85..2c2e6ac 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -54,16 +54,16 @@ usage () {
+ # Handle the command line arguments, if any.
+ while test $# -gt 0; do
+     case "$1" in
+-	--help) usage ;;
++        --help) usage ;;
+         --test-root=*)
+             # Deliberately undocumented: used for 'make check'.
+             root=$(echo "$1" | sed 's/.*=//')
+             shift 1
+             test -z "$root" && fail "--test-root option requires a value"
+             ;;
+-	-v|--version) echo "$VERSION"; exit 0 ;;
+-	--) shift; break ;;
+-	*) fail "unrecognized option '$1'";;
++        -v|--version) echo "$VERSION"; exit 0 ;;
++        --) shift; break ;;
++        *) fail "unrecognized option '$1'";;
+     esac
+ done
+ test $# -gt 0 && fail "extra operand '$1'"
+@@ -261,7 +261,7 @@ fi
+ 
+ if ! "$skip_qemu_kvm"; then
+     if [ "$cpuid" = "KVMKVMKVM" ]; then
+-	echo kvm
++        echo kvm
+     elif [ "$arch" = "arm" ] || [ "$arch" = "aarch64" ]; then
+         if [ -d "${root}/proc/device-tree" ] &&
+             ls "${root}/proc/device-tree" | grep -q "fw-cfg"; then
+@@ -281,8 +281,8 @@ if ! "$skip_qemu_kvm"; then
+         # string.  The long term fix for this would be to export
+         # another CPUID leaf for non-accelerated qemu.
+         if grep -q 'QEMU' "${root}/proc/cpuinfo"; then
+-	    echo qemu
+-	fi
++            echo qemu
++        fi
+     fi
+ fi
+ 
+@@ -293,11 +293,11 @@ if ! "$skip_lkvm"; then
+         if [ -d "${root}/proc/device-tree" ] &&
+             grep -q "dummy-virt" "${root}/proc/device-tree/compatible"; then
+             echo lkvm
+-	fi
++        fi
+     fi
+ fi
+ 
+ # Check for Docker.
+ if [ -f "${root}/.dockerinit" ]; then
+-	echo docker
++    echo docker
+ fi
+-- 
+1.8.3.1
+

@@ -1,7 +1,7 @@
-From a68e9c005933a2d8d0f3264bdb68161263cd3933 Mon Sep 17 00:00:00 2001
+From 960e513f430170bb58d59dcb26951f879a9baa7b Mon Sep 17 00:00:00 2001
 From: Assaf Gordon <assafgordon@gmail.com>
 Date: Mon, 15 Sep 2014 19:15:19 +0000
-Subject: [PATCH 09/16] virt-what.in: verify files exists before grepping them
+Subject: [PATCH 11/26] virt-what.in: verify files exists before grepping them
 
 Don't grep linux-specific files (e.g. /proc/cpuinfo) unless they exist.
 This avoids extraneous errors on BSD/Hurd systems which don't have these
@@ -61,5 +61,5 @@ index 5ae1ccb..6e9aef1 100644
      if [ -f "${root}/proc/sysinfo" ]; then
          if grep -q 'VM.*Control Program.*z/VM' "${root}/proc/sysinfo"; then
 -- 
-2.3.1
+1.8.3.1
 

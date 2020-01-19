@@ -1,7 +1,7 @@
-From e3e88af8847a4269fb275fd054fc36c5066d5d49 Mon Sep 17 00:00:00 2001
+From d3908f46427a9126742a70967cf787edfd37ab43 Mon Sep 17 00:00:00 2001
 From: Assaf Gordon <assafgordon@gmail.com>
 Date: Mon, 15 Sep 2014 19:08:20 +0000
-Subject: [PATCH 08/16] virt-what.in: warn about missing cpuid-virt helper
+Subject: [PATCH 10/26] virt-what.in: warn about missing cpuid-virt helper
  program
 
 Try to find the binary program on the $PATH, and give informative error
@@ -28,5 +28,5 @@ index 3feeb60..5ae1ccb 100644
  # helper program to get this information.
  
 -- 
-2.3.1
+1.8.3.1
 

@@ -1,7 +1,7 @@
 From 9709c8f01ec3e2f78bcaa07045343de249d7618d Mon Sep 17 00:00:00 2001
 From: "Richard W.M. Jones" <rjones@redhat.com>
 Date: Thu, 12 Dec 2013 08:47:37 +0000
-Subject: [PATCH 01/16] Fix various typos and mistakes in comments.
+Subject: [PATCH 04/26] Fix various typos and mistakes in comments.
 
 (Thanks Robert P. J. Day)
 ---
@@ -38,5 +38,5 @@ index 4b6d3b8..fb399be 100644
  prefix=@prefix@
  exec_prefix=@exec_prefix@
 -- 
-2.3.1
+1.8.3.1
 

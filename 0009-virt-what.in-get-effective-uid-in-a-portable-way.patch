@@ -1,7 +1,7 @@
-From f82984fb84e9fed84aa71a50a1bfdfdc356771bd Mon Sep 17 00:00:00 2001
+From e1e79b9a988ab66f7ab673034488b42057621320 Mon Sep 17 00:00:00 2001
 From: Assaf Gordon <assafgordon@gmail.com>
 Date: Mon, 15 Sep 2014 18:58:19 +0000
-Subject: [PATCH 07/16] virt-what.in: get effective uid in a portable way
+Subject: [PATCH 09/26] virt-what.in: get effective uid in a portable way
 
 $EUID is bash-specific. Use the POSIX-compatible 'id -u' instead.
 ---
@@ -24,5 +24,5 @@ index 1532b90..3feeb60 100644
  fi
  
 -- 
-2.3.1
+1.8.3.1
 

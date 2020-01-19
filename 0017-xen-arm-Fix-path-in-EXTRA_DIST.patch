@@ -1,7 +1,7 @@
-From 5c4bdcf6abe012dbc4965e5bede00c8a9d31a8f6 Mon Sep 17 00:00:00 2001
+From ac098dd1513370145f10d6dd7c147b45168ef6a0 Mon Sep 17 00:00:00 2001
 From: "Richard W.M. Jones" <rjones@redhat.com>
 Date: Tue, 21 Apr 2015 12:12:45 +0100
-Subject: [PATCH 15/16] xen-arm: Fix path in EXTRA_DIST.
+Subject: [PATCH 17/26] xen-arm: Fix path in EXTRA_DIST.
 
 ---
  Makefile.am | 2 +-
@@ -21,5 +21,5 @@ index 514d229..8a47e96 100644
  	tests/xen-arm/sbin/dmidecode \
  	tests/xen-arm/sbin/uname \
 -- 
-2.3.1
+1.8.3.1
 

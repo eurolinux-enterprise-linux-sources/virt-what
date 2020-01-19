@@ -1,0 +1,391 @@
+From 8528efafcad59f0fde7e15860f19061c3af810fa Mon Sep 17 00:00:00 2001
+From: Andrew Jones <drjones@redhat.com>
+Date: Tue, 27 Oct 2015 18:16:04 +0100
+Subject: [PATCH 24/26] qemu/kvm: dmidecode: look for 'KVM'
+
+We can check the product name for 'KVM' to determine if we're
+accelerated. This only works for arm/aarch64 targets boot with
+AAVMF and on RHEL x86 targets (which already have KVM in the cpuid
+leaf), but it doesn't hurt to try on all.
+---
+ Makefile.am                                       |   6 +
+ tests/qemu-smbios-kvm/proc/cpuinfo                |  63 ++++++++++
+ tests/qemu-smbios-kvm/proc/self/status            |  41 +++++++
+ tests/qemu-smbios-kvm/sbin/dmidecode              | 141 ++++++++++++++++++++++
+ tests/qemu-smbios-kvm/sbin/uname                  |   2 +
+ tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper |   2 +
+ tests/test-qemu-smbios-kvm.sh                     |  34 ++++++
+ virt-what.in                                      |   7 +-
+ 8 files changed, 294 insertions(+), 2 deletions(-)
+ create mode 100644 tests/qemu-smbios-kvm/proc/cpuinfo
+ create mode 100644 tests/qemu-smbios-kvm/proc/self/status
+ create mode 100755 tests/qemu-smbios-kvm/sbin/dmidecode
+ create mode 100755 tests/qemu-smbios-kvm/sbin/uname
+ create mode 100755 tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper
+ create mode 100755 tests/test-qemu-smbios-kvm.sh
+
+diff --git a/Makefile.am b/Makefile.am
+index 0045bcb..7d87ec1 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -54,6 +54,7 @@ TESTS = \
+ 	tests/test-qemu.sh \
+ 	tests/test-qemu-arm.sh \
+ 	tests/test-qemu-smbios.sh \
++	tests/test-qemu-smbios-kvm.sh \
+ 	tests/test-rhel5-xen-dom0.sh \
+ 	tests/test-rhel5-xen-domU-hvm.sh \
+ 	tests/test-rhel5-xen-domU-hvm-ia64.sh \
+@@ -143,6 +144,11 @@ EXTRA_DIST = \
+ 	tests/qemu-smbios/sbin/dmidecode \
+ 	tests/qemu-smbios/sbin/uname \
+ 	tests/qemu-smbios/sbin/virt-what-cpuid-helper \
++	tests/qemu-smbios-kvm/proc/cpuinfo \
++	tests/qemu-smbios-kvm/proc/self/status \
++	tests/qemu-smbios-kvm/sbin/dmidecode \
++	tests/qemu-smbios-kvm/sbin/uname \
++	tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper \
+ 	tests/rhel5-xen-dom0/proc/cpuinfo \
+ 	tests/rhel5-xen-dom0/proc/self/status \
+ 	tests/rhel5-xen-dom0/proc/xen/balloon \
+diff --git a/tests/qemu-smbios-kvm/proc/cpuinfo b/tests/qemu-smbios-kvm/proc/cpuinfo
+new file mode 100644
+index 0000000..b83a182
+--- /dev/null
++++ b/tests/qemu-smbios-kvm/proc/cpuinfo
+@@ -0,0 +1,63 @@
++processor	: 0
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 1
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 2
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 3
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 4
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 5
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 6
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
++
++processor	: 7
++Features	: fp asimd evtstrm
++CPU implementer	: 0x50
++CPU architecture: 8
++CPU variant	: 0x0
++CPU part	: 0x000
++CPU revision	: 0
+diff --git a/tests/qemu-smbios-kvm/proc/self/status b/tests/qemu-smbios-kvm/proc/self/status
+new file mode 100644
+index 0000000..751f5e7
+--- /dev/null
++++ b/tests/qemu-smbios-kvm/proc/self/status
+@@ -0,0 +1,41 @@
++Name:	cat
++State:	R (running)
++Tgid:	8307
++Ngid:	0
++Pid:	8307
++PPid:	1415
++TracerPid:	0
++Uid:	0	0	0	0
++Gid:	0	0	0	0
++FDSize:	256
++Groups:	
++VmPeak:	  109696 kB
++VmSize:	  109696 kB
++VmLck:	       0 kB
++VmPin:	       0 kB
++VmHWM:	     832 kB
++VmRSS:	     832 kB
++VmData:	     320 kB
++VmStk:	     256 kB
++VmExe:	      64 kB
++VmLib:	    1536 kB
++VmPTE:	     192 kB
++VmSwap:	       0 kB
++Threads:	1
++SigQ:	0/5821
++SigPnd:	0000000000000000
++ShdPnd:	0000000000000000
++SigBlk:	0000000000000000
++SigIgn:	0000000000000000
++SigCgt:	0000000000000000
++CapInh:	0000000000000000
++CapPrm:	0000003fffffffff
++CapEff:	0000003fffffffff
++CapBnd:	0000003fffffffff
++Seccomp:	0
++Cpus_allowed:	ff
++Cpus_allowed_list:	0-7
++Mems_allowed:	1
++Mems_allowed_list:	0
++voluntary_ctxt_switches:	1
++nonvoluntary_ctxt_switches:	1
+diff --git a/tests/qemu-smbios-kvm/sbin/dmidecode b/tests/qemu-smbios-kvm/sbin/dmidecode
+new file mode 100755
+index 0000000..a2caabb
+--- /dev/null
++++ b/tests/qemu-smbios-kvm/sbin/dmidecode
+@@ -0,0 +1,141 @@
++#!/bin/sh -
++cat <<'EOF'
++# dmidecode 3.0
++Getting SMBIOS data from sysfs.
++SMBIOS 3.0.0 present.
++Table at 0x136650000.
++
++Handle 0x0100, DMI type 1, 27 bytes
++System Information
++	Manufacturer: QEMU
++	Product Name: KVM Virtual Machine
++	Version: 1.0
++	Serial Number: Not Specified
++	UUID: 6EB70381-DF9C-4407-B6AB-9FA4452117EA
++	Wake-up Type: Power Switch
++	SKU Number: Not Specified
++	Family: Red Hat Enterprise Linux
++
++Handle 0x0300, DMI type 3, 21 bytes
++Chassis Information
++	Manufacturer: QEMU
++	Type: Other
++	Lock: Not Present
++	Version: 1.0
++	Serial Number: Not Specified
++	Asset Tag: Not Specified
++	Boot-up State: Safe
++	Power Supply State: Safe
++	Thermal State: Safe
++	Security Status: Unknown
++	OEM Information: 0x00000000
++	Height: Unspecified
++	Number Of Power Cords: Unspecified
++	Contained Elements: 0
++
++Handle 0x0400, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU 0
++	Type: Central Processor
++	Family: Other
++	Manufacturer: QEMU
++	ID: 00 00 00 00 00 00 00 00
++	Version: 1.0
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: 2000 MHz
++	Current Speed: 2000 MHz
++	Status: Populated, Enabled
++	Upgrade: Other
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: Not Specified
++	Asset Tag: Not Specified
++	Part Number: Not Specified
++	Core Count: 1
++	Core Enabled: 1
++	Thread Count: 1
++	Characteristics: None
++
++Handle 0x0401, DMI type 4, 42 bytes
++Processor Information
++	Socket Designation: CPU 1
++	Type: Central Processor
++	Family: Other
++	Manufacturer: QEMU
++	ID: 00 00 00 00 00 00 00 00
++	Version: 1.0
++	Voltage: Unknown
++	External Clock: Unknown
++	Max Speed: 2000 MHz
++	Current Speed: 2000 MHz
++	Status: Populated, Enabled
++	Upgrade: Other
++	L1 Cache Handle: Not Provided
++	L2 Cache Handle: Not Provided
++	L3 Cache Handle: Not Provided
++	Serial Number: Not Specified
++	Asset Tag: Not Specified
++	Part Number: Not Specified
++	Core Count: 1
++	Core Enabled: 1
++	Thread Count: 1
++	Characteristics: None
++
++Handle 0x1000, DMI type 16, 23 bytes
++Physical Memory Array
++	Location: Other
++	Use: System Memory
++	Error Correction Type: Multi-bit ECC
++	Maximum Capacity: 4 GB
++	Error Information Handle: Not Provided
++	Number Of Devices: 1
++
++Handle 0x1100, DMI type 17, 40 bytes
++Memory Device
++	Array Handle: 0x1000
++	Error Information Handle: Not Provided
++	Total Width: Unknown
++	Data Width: Unknown
++	Size: 4096 MB
++	Form Factor: DIMM
++	Set: None
++	Locator: DIMM 0
++	Bank Locator: Not Specified
++	Type: RAM
++	Type Detail: Other
++	Speed: Unknown
++	Manufacturer: QEMU
++	Serial Number: Not Specified
++	Asset Tag: Not Specified
++	Part Number: Not Specified
++	Rank: Unknown
++	Configured Clock Speed: Unknown
++	Minimum Voltage: Unknown
++	Maximum Voltage: Unknown
++	Configured Voltage: Unknown
++
++Handle 0x2000, DMI type 32, 11 bytes
++System Boot Information
++	Status: No errors detected
++
++Handle 0x0000, DMI type 0, 24 bytes
++BIOS Information
++	Vendor: EFI Development Kit II / OVMF
++	Version: 0.0.0
++	Release Date: 02/06/2015
++	Address: 0xE8000
++	Runtime Size: 96 kB
++	ROM Size: 64 kB
++	Characteristics:
++		BIOS characteristics not supported
++		Targeted content distribution is supported
++		UEFI is supported
++		System is a virtual machine
++	BIOS Revision: 0.0
++
++Handle 0xFEFF, DMI type 127, 4 bytes
++End Of Table
++
++EOF
+diff --git a/tests/qemu-smbios-kvm/sbin/uname b/tests/qemu-smbios-kvm/sbin/uname
+new file mode 100755
+index 0000000..bd33a2d
+--- /dev/null
++++ b/tests/qemu-smbios-kvm/sbin/uname
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++echo aarch64
+diff --git a/tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper b/tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper
+new file mode 100755
+index 0000000..77a6692
+--- /dev/null
++++ b/tests/qemu-smbios-kvm/sbin/virt-what-cpuid-helper
+@@ -0,0 +1,2 @@
++#!/bin/sh -
++# nothing
+diff --git a/tests/test-qemu-smbios-kvm.sh b/tests/test-qemu-smbios-kvm.sh
+new file mode 100755
+index 0000000..f4d8e38
+--- /dev/null
++++ b/tests/test-qemu-smbios-kvm.sh
+@@ -0,0 +1,34 @@
++# Test for qemu on ARM
++# Copyright (C) 2015 Red Hat Inc.
++#
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++root=tests/qemu-smbios-kvm
++
++output="$(./virt-what --test-root=$root 2>&1)"
++expected="kvm"
++
++if [ "$output" != "$expected" ]; then
++    echo "$0: test failed because output did not match expected"
++    echo "Expected output was:"
++    echo "----------------------------------------"
++    echo "$expected"
++    echo "----------------------------------------"
++    echo "But the actual output of the program was:"
++    echo "----------------------------------------"
++    echo "$output"
++    echo "----------------------------------------"
++    exit 1
++fi
+diff --git a/virt-what.in b/virt-what.in
+index 355e438..776bfde 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -262,9 +262,12 @@ fi
+ if ! "$skip_qemu_kvm"; then
+     if [ "$cpuid" = "KVMKVMKVM" ]; then
+         echo kvm
++    elif echo "$dmi" | grep -q 'Product Name: KVM'; then
++        echo kvm
++        skip_lkvm=true
+     elif echo "$dmi" | grep -q 'Manufacturer: QEMU'; then
+-        # We don't have enough information to determine if we're
+-        # using KVM acceleration or not.
++        # The test for KVM above failed, so now we know we're
++        # not using KVM acceleration.
+         echo qemu
+         skip_lkvm=true
+     elif [ "$arch" = "arm" ] || [ "$arch" = "aarch64" ]; then
+-- 
+1.8.3.1
+

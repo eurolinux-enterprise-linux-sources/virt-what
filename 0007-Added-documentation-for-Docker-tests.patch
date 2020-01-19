@@ -1,7 +1,7 @@
-From 902276acb3c0f92fc08c618cbbba18e9bee5a38f Mon Sep 17 00:00:00 2001
+From aab6a7d67b4e3bb1f9697ded4dba8bc0c16d32fa Mon Sep 17 00:00:00 2001
 From: Charles Nguyen <chuckleb@gmail.com>
 Date: Sat, 21 Jun 2014 23:43:05 -0500
-Subject: [PATCH 05/16] Added documentation for Docker tests
+Subject: [PATCH 07/26] Added documentation for Docker tests
 
 ---
  virt-what.pod | 6 ++++++
@@ -25,5 +25,5 @@ index bcafd26..8fd9bc4 100644
  
  This is Microsoft Hyper-V hypervisor.
 -- 
-2.3.1
+1.8.3.1
 

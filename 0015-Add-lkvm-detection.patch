@@ -1,7 +1,7 @@
-From 18d21a55c9551b76f0cdb93cd8e7b127173f083b Mon Sep 17 00:00:00 2001
+From 33277fafa3892b27d3d265863d33e89ac2eea55e Mon Sep 17 00:00:00 2001
 From: Andrew Jones <drjones@redhat.com>
 Date: Fri, 27 Mar 2015 21:18:59 +0100
-Subject: [PATCH 13/16] Add lkvm detection
+Subject: [PATCH 15/26] Add lkvm detection
 
 Signed-off-by: Andrew Jones <drjones@redhat.com>
 ---
@@ -233,5 +233,5 @@ index 8fd9bc4..0e2e8a5 100644
  
  The guest appears to be running inside an OpenVZ or Virtuozzo
 -- 
-2.3.1
+1.8.3.1
 

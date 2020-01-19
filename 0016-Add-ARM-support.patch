@@ -1,7 +1,7 @@
-From 87d670b4c8b4e4e0cc314736562a9a6612d555ef Mon Sep 17 00:00:00 2001
+From b87a2d79ce8c5eee3a2f945b8eb00d893104fd10 Mon Sep 17 00:00:00 2001
 From: Andrew Jones <drjones@redhat.com>
 Date: Fri, 27 Mar 2015 21:19:00 +0100
-Subject: [PATCH 14/16] Add ARM support
+Subject: [PATCH 16/26] Add ARM support
 
 Currently only detects LKVM, QEMU/KVM, and Xen. Also only works if
 the guest is booted with DT (which is the only way that currently
@@ -732,5 +732,5 @@ index ed08dae..a5ed33e 100644
  fi
  
 -- 
-2.3.1
+1.8.3.1
 

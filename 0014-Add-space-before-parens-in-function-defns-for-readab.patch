@@ -1,7 +1,7 @@
-From bdb7404ca6221d6d18e1a4864aa2cd0698164a06 Mon Sep 17 00:00:00 2001
+From 35852eafd298e27b9388b80ec018ffb1249f8538 Mon Sep 17 00:00:00 2001
 From: "Richard W.M. Jones" <rjones@redhat.com>
 Date: Tue, 16 Sep 2014 19:02:18 +0100
-Subject: [PATCH 12/16] Add space before parens in function defns for
+Subject: [PATCH 14/26] Add space before parens in function defns for
  readability.
 
 ---
@@ -33,5 +33,5 @@ index f2c0b90..0770070 100644
      echo "Options:"
      echo "  --help          Display this help"
 -- 
-2.3.1
+1.8.3.1
 

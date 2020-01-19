@@ -1,30 +1,40 @@
 Name:           virt-what
 Version:        1.13
-Release:        6%{?dist}
+Release:        8%{?dist}
 Summary:        Detect if we are running in a virtual machine
 License:        GPLv2+
 
 URL:            http://people.redhat.com/~rjones/virt-what/
 Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz
 
-Patch1:         0001-Differentiate-between-vserver-host-and-guest.patch
-Patch2:         0002-Detect-new-Xen-VMs-RHBZ-973663.patch
-Patch3:         0001-xen-Don-t-emit-warning-message-if-proc-xen-capabilit.patch
-Patch4:         0001-Fix-various-typos-and-mistakes-in-comments.patch
-Patch5:         0003-Fix-spelling-mistake-in-the-man-page-RHBZ-1099289.patch
-Patch6:         0004-Added-check-and-test-routines-for-Docker.patch
-Patch7:         0005-Added-documentation-for-Docker-tests.patch
-Patch8:         0006-virt-what.in-remove-bash-ism.patch
-Patch9:         0007-virt-what.in-get-effective-uid-in-a-portable-way.patch
-Patch10:        0008-virt-what.in-warn-about-missing-cpuid-virt-helper-pr.patch
-Patch11:        0009-virt-what.in-verify-files-exists-before-grepping-the.patch
-Patch12:        0010-virt-what.in-make-option-processing-portable.patch
-Patch13:        0011-build-use-portable-Makefile-variables.patch
-Patch14:        0012-Add-space-before-parens-in-function-defns-for-readab.patch
-Patch15:        0013-Add-lkvm-detection.patch
-Patch16:        0014-Add-ARM-support.patch
-Patch17:        0015-xen-arm-Fix-path-in-EXTRA_DIST.patch
-
+# These patches are kept in the upstream git repo, in the rhel-7.3 branch.
+# http://git.annexia.org/?p=virt-what.git;a=shortlog;h=refs/heads/rhel-7.3
+Patch0001:      0001-Differentiate-between-vserver-host-and-guest.patch
+Patch0002:      0002-Detect-new-Xen-VMs-RHBZ-973663.patch
+Patch0003:      0003-xen-Don-t-emit-warning-message-if-proc-xen-capabilit.patch
+Patch0004:      0004-Fix-various-typos-and-mistakes-in-comments.patch
+Patch0005:      0005-Fix-spelling-mistake-in-the-man-page-RHBZ-1099289.patch
+Patch0006:      0006-Added-check-and-test-routines-for-Docker.patch
+Patch0007:      0007-Added-documentation-for-Docker-tests.patch
+Patch0008:      0008-virt-what.in-remove-bash-ism.patch
+Patch0009:      0009-virt-what.in-get-effective-uid-in-a-portable-way.patch
+Patch0010:      0010-virt-what.in-warn-about-missing-cpuid-virt-helper-pr.patch
+Patch0011:      0011-virt-what.in-verify-files-exists-before-grepping-the.patch
+Patch0012:      0012-virt-what.in-make-option-processing-portable.patch
+Patch0013:      0013-build-use-portable-Makefile-variables.patch
+Patch0014:      0014-Add-space-before-parens-in-function-defns-for-readab.patch
+Patch0015:      0015-Add-lkvm-detection.patch
+Patch0016:      0016-Add-ARM-support.patch
+Patch0017:      0017-xen-arm-Fix-path-in-EXTRA_DIST.patch
+Patch0018:      0018-Update-copyright-years.patch
+Patch0019:      0019-Add-QEMU-KVM-detection-for-ACPI-boot-ARM.patch
+Patch0020:      0020-trivial-comment-fixup.patch
+Patch0021:      0021-Add-oVirt-RHBZ-1249438.patch
+Patch0022:      0022-trivial-virt-what.in-doesn-t-use-tabs.patch
+Patch0023:      0023-qemu-kvm-try-dmidecode-on-all-targets.patch
+Patch0024:      0024-qemu-kvm-dmidecode-look-for-KVM.patch
+Patch0025:      0025-Add-support-for-detecting-ppc64-LPAR-as-virt-guests.patch
+Patch0026:      0026-Update-the-previous-commit-to-use-system-virt-standa.patch
 
 # This is provided by the build root, but we make it explicit
 # anyway in case this was dropped from the build root in future.
@@ -41,7 +51,7 @@ BuildRequires:  automake
 
 # virt-what script uses dmidecode and getopt (from util-linux).
 # RPM cannot detect this so make the dependencies explicit here.
-%ifarch %{ix86} x86_64
+%ifarch aarch64 %{ix86} x86_64
 Requires:       dmidecode
 %endif
 Requires:       util-linux
@@ -111,6 +121,20 @@ make check
 
 
 %changelog
+* Wed Jul 27 2016 Richard W.M. Jones <rjones@redhat.com> - 1.13-8
+- Depend on dmidecode on aarch64
+  resolves: rhbz#1360699
+
+* Mon Jun 20 2016 Richard W.M. Jones <rjones@redhat.com> - 1.13-7
+- Add support for detecting POWER KVM and LPAR
+  resolves: rhbz#1147876
+- Detect RHEV/oVirt
+  resolves: rhbz#1249438
+- Detect ACPI boot aarch64 guest
+  resolves: rhbz#1275349
+- Fix typo in manual page
+  resolves: rhbz#1099289
+
 * Tue Apr 21 2015 Richard W.M. Jones <rjones@redhat.com> - 1.13-6
 - Fix detection of aarch64
   resolves: rhbz#1201845

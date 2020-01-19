@@ -1,7 +1,7 @@
 From d409914d13b88541402fe871d70e3dff9d738455 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Elan=20Ruusam=C3=A4e?= <glen@pld-linux.org>
 Date: Mon, 2 Sep 2013 15:24:11 +0100
-Subject: [PATCH 1/2] Differentiate between vserver host and guest.
+Subject: [PATCH 01/26] Differentiate between vserver host and guest.
 
 RWMJ: Update documentation and tests.
 ---

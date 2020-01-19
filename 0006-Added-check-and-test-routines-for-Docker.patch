@@ -1,7 +1,7 @@
-From abd067c4760640e232203689b4d32eacafdbbdde Mon Sep 17 00:00:00 2001
+From 89765910064584ebaea7a9899838a2cb66740d26 Mon Sep 17 00:00:00 2001
 From: Charles Nguyen <chuckleb@gmail.com>
 Date: Sat, 21 Jun 2014 22:27:51 -0500
-Subject: [PATCH 04/16] Added check and test routines for Docker
+Subject: [PATCH 06/26] Added check and test routines for Docker
 
 ---
  Makefile.am                              |  7 +++++++
@@ -138,5 +138,5 @@ index fb399be..c04203e 100644
 +	echo docker
 +fi
 -- 
-2.3.1
+1.8.3.1
 

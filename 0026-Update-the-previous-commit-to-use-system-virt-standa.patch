@@ -1,0 +1,104 @@
+From b933eff4e7c86959a096f15e5372d4491e56a55b Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 20 Jun 2016 13:14:53 +0100
+Subject: [PATCH 26/26] Update the previous commit to use <system>-<virt>
+ standard for facts.
+
+Also I renamed ppc64 to power, since that is the official IBM name.
+---
+ tests/test-ppc64-kvm.sh            |  2 +-
+ tests/test-ppc64-lpar-dedicated.sh |  2 +-
+ tests/test-ppc64-lpar-shared.sh    |  2 +-
+ virt-what.in                       |  6 +++---
+ virt-what.pod                      | 15 +++++++++++++++
+ 5 files changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/tests/test-ppc64-kvm.sh b/tests/test-ppc64-kvm.sh
+index ea844e1..c691c96 100755
+--- a/tests/test-ppc64-kvm.sh
++++ b/tests/test-ppc64-kvm.sh
+@@ -18,7 +18,7 @@
+ root=tests/ppc64-kvm
+ 
+ output="$(./virt-what --test-root=$root 2>&1)"
+-expected="ibm_ppc64_kvm"
++expected="ibm_power-kvm"
+ 
+ if [ "$output" != "$expected" ]; then
+     echo "$0: test failed because output did not match expected"
+diff --git a/tests/test-ppc64-lpar-dedicated.sh b/tests/test-ppc64-lpar-dedicated.sh
+index ef99b27..0316ea2 100755
+--- a/tests/test-ppc64-lpar-dedicated.sh
++++ b/tests/test-ppc64-lpar-dedicated.sh
+@@ -18,7 +18,7 @@
+ root=tests/ppc64-lpar-dedicated
+ 
+ output="$(./virt-what --test-root=$root 2>&1)"
+-expected="ibm_ppc64_lpar_dedicated"
++expected="ibm_power-lpar_dedicated"
+ 
+ if [ "$output" != "$expected" ]; then
+     echo "$0: test failed because output did not match expected"
+diff --git a/tests/test-ppc64-lpar-shared.sh b/tests/test-ppc64-lpar-shared.sh
+index eaac0e4..bbc974a 100755
+--- a/tests/test-ppc64-lpar-shared.sh
++++ b/tests/test-ppc64-lpar-shared.sh
+@@ -18,7 +18,7 @@
+ root=tests/ppc64-lpar-shared
+ 
+ output="$(./virt-what --test-root=$root 2>&1)"
+-expected="ibm_ppc64_lpar_shared"
++expected="ibm_power-lpar_shared"
+ 
+ if [ "$output" != "$expected" ]; then
+     echo "$0: test failed because output did not match expected"
+diff --git a/virt-what.in b/virt-what.in
+index a91845e..0e048a2 100644
+--- a/virt-what.in
++++ b/virt-what.in
+@@ -316,13 +316,13 @@ fi
+ if [ "$arch" = "ppc64" ]; then
+     if have_cpuinfo && grep -q 'platform.**pSeries' "${root}/proc/cpuinfo"; then
+         if grep -q 'model.*emulated by qemu' "${root}/proc/cpuinfo"; then
+-                echo ibm_ppc64_kvm
++                echo ibm_power-kvm
+         else
+             # Assume LPAR, now detect shared or dedicated
+             if grep -q 'shared_processor_mode=1' "${root}/proc/ppc64/lparcfg"; then
+-                echo ibm_ppc64_lpar_shared
++                echo ibm_power-lpar_shared
+             else
+-                echo ibm_ppc64_lpar_dedicated
++                echo ibm_power-lpar_dedicated
+             fi
+         # detect powerkvm?
+         fi
+diff --git a/virt-what.pod b/virt-what.pod
+index 4e38414..fe9567f 100644
+--- a/virt-what.pod
++++ b/virt-what.pod
+@@ -37,6 +37,21 @@ This is Microsoft Hyper-V hypervisor.
+ 
+ Status: confirmed by RWMJ
+ 
++=item B<ibm_power-kvm>
++
++This is an IBM POWER KVM guest.
++
++Status: contributed by Adrian Likins.
++
++=item B<ibm_power-lpar_shared>
++
++=item B<ibm_power-lpar_dedicated>
++
++This is an IBM POWER LPAR (hardware partition) in either shared
++or dedicated mode.
++
++Status: contributed by Adrian Likins.
++
+ =item B<ibm_systemz>
+ 
+ This is an IBM SystemZ (or other S/390) hardware partitioning system.
+-- 
+1.8.3.1
+

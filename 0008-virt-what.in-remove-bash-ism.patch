@@ -1,7 +1,7 @@
-From 6382ef1cb5b8c146bfd35912730dccd68ab4b71a Mon Sep 17 00:00:00 2001
+From 8769b28cce8fdbc7da0605b061242b9dba51fc20 Mon Sep 17 00:00:00 2001
 From: "A. Gordon" <assafgordon@gmail.com>
 Date: Mon, 15 Sep 2014 14:48:23 -0400
-Subject: [PATCH 06/16] virt-what.in: remove bash-ism
+Subject: [PATCH 08/26] virt-what.in: remove bash-ism
 
 Use '/bin/sh' instead of '/bin/bash', with POSIX-compatible function
 definitions.
@@ -35,5 +35,5 @@ index c04203e..1532b90 100644
      echo "Options:"
      echo "  --help          Display this help"
 -- 
-2.3.1
+1.8.3.1
 
